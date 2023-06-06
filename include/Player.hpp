@@ -9,6 +9,7 @@ using namespace std;
 
 const int DEFULT_LAST_WEEK = -10;
 const int MAX_COUNT_OF_YELLOW_CARD = 3;
+
 class Player
 {
 public:
@@ -26,11 +27,13 @@ public:
     string get_player_role();
     void increase_score(double score){scores_of_weeks.push_back(score); count_of_week_played++;}
     double get_average_score();
+    int get_player_price(){return player_price;}
+    void set_player_price(int _player_price){player_price = _player_price;}
     
-
 private: 
     string name ;
     double score = 0;
+    int player_price = DEFULT_PLAYER_PRICE;
     enum Player_type type;
     bool can_be_sold = true;
     int last_week_red_card = DEFULT_LAST_WEEK;
@@ -38,7 +41,5 @@ private:
     int last_week_injury = DEFULT_LAST_WEEK;
     int count_of_week_played = 0;
     vector<double> scores_of_weeks;
-
-
 
 };

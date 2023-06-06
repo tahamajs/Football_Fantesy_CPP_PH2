@@ -19,7 +19,8 @@ public:
     bool is_full(){return number_of_player == 5;}
     vector<Player*> get_fantasy_team_players();
     double get_score(){return score;}
-    
+    int get_price(){return price;}
+
 private:
     string team_name;
     double score = 0;
@@ -31,11 +32,11 @@ private:
     int number_of_player = 0;
     bool is_full_yet = false;
 
+    int price = DEFULT_FANTASY_TEAM_PRICE;
+
     int sell_count_week[NUMBER_OF_WEEK] = {};
     int add_count_week[NUMBER_OF_WEEK] = {};
     
-
-
 
     
 };
