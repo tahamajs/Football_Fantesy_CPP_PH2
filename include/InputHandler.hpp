@@ -27,6 +27,7 @@ const string SHOW_MATCH_RESULT = "matches_result_league";
 const string LOGIN_ADMIN = "register_admin";
 const string SELL_PLAYER = "sell_player";
 const string BUY_PLAYER = "buy_player";
+const string SET_CAPTAIN = "set_captain";
 const string SHOW_FANTASY_TEAM = "squad";
 const string CLOSE_TRANSFARE_WINDOW = "close_transfer_window";
 const string OPEN_TRANSFARE_WINDOW = "open_transfer_window";
@@ -75,6 +76,7 @@ private:
     void print_successfull_massage();
     int count_of_input_word();
     void replaceUnderscoresWithSpaces(std::string& str);
+    void set_captan();
 
 
     const vector<string> signup_field = {USERNAME, PASSWORD};
@@ -95,7 +97,8 @@ private:
         {CLOSE_TRANSFARE_WINDOW, &InputHandler::close_transfer_window},
         {OPEN_TRANSFARE_WINDOW, &InputHandler::open_transfer_window},
         {PASS_WEEK, &InputHandler::pass_week},
-        {LOGIN_ADMIN, &InputHandler::login_admin}
+        {LOGIN_ADMIN, &InputHandler::login_admin},
+        {SET_CAPTAIN, &InputHandler::set_captan}
     };
 
     const unordered_map<string, call_func_ptr> GET_commands =

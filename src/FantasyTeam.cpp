@@ -261,3 +261,15 @@ bool FantasyTeam::check_price(Player *player)
         return false;
     }
 }
+
+bool FantasyTeam::is_capitan(Player *player)
+{
+    if (Captain_player != NULL && Captain_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

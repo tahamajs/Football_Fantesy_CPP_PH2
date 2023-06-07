@@ -471,3 +471,24 @@ void InputHandler::show_players()
         throw Bad_request();
 }
 
+
+////////////////////////////////////  need to be check  /////////////////////////////////////////////
+void InputHandler::set_captan()
+{
+    string input;
+    string player_name;
+
+    if(!cmnd_dlmtr_check())
+        throw Bad_request();
+
+    command_line >> input;
+    if(input != NAME)
+        throw Bad_request();
+    
+    command_line >> std::ws;
+    getline(command_line, player_name);
+    system->set_capitan(player_name);
+    print_successfull_massage();
+}
+
+

@@ -22,6 +22,7 @@ public:
     int get_price(){return price;}
     void set_capitan(Player* player);
     bool check_price(Player* player);
+    bool is_capitan(Player* player);
 
 private:
     string team_name;

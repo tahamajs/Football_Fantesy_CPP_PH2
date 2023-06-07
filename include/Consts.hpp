@@ -75,5 +75,5 @@ const int DEFULT_SCORE_DEFENDER_IN_WEEK = 1;
 const int DEFULT_SCORE_GOALKEEPER_IN_WEEK = 3;
 
 
-
+const string CAPTAIN_STRING = "(CAPTAIN)";
 const string OWN_GOAL_STRING = "OWN_GOAL";

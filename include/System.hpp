@@ -40,7 +40,7 @@ public:
     void print_main_team_players(string team_name ,string type ,bool rank);
     void print_league_standings();
     void show_price(string player_name);
-
+    void set_capitan(string player_name);
     void print_week_1();
     void print_players();
     
@@ -55,6 +55,7 @@ private:
     MainTeam* find_team(string team_name);
     FantasyTeam* find_fantasy_team(string team_name);
     vector<User*> get_user_ranks();
+    double get_total_cost_of_fantasy_team(FantasyTeam* fantasy_team);
 
     vector<User*> users;
     vector<MainTeam*> main_teams;

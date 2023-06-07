@@ -492,14 +492,35 @@ void System::print_fantasy_team(string team_name = "")
 
 
     /////////////////////////////////// need to be deleted /////////////////////////////////////////
-    cout << "GoalKeeper: " << players[0]->get_name() << " " << endl;
-    cout << "Defender 1: " << players[1]->get_name() << " " << endl;
-    cout << "Defender 2: " << players[2]->get_name() << " " << endl;
-    cout << "Midfielder: " << players[3]->get_name() << " " << endl;
-    cout << "Striker: " << players[4]->get_name() << " " << endl;
+    cout << "GoalKeeper: " << players[0]->get_name();
+    if(fantasy_team->is_capitan(players[0]))
+        cout << " " << CAPTAIN_STRING;
+    cout << endl; 
+
+    cout << "Defender 1: " << players[1]->get_name();
+    if(fantasy_team->is_capitan(players[1]))
+        cout << " " << CAPTAIN_STRING;
+    cout << endl;
+
+    cout << "Defender 2: " << players[2]->get_name();
+    if(fantasy_team->is_capitan(players[2]))
+        cout << " " << CAPTAIN_STRING;
+    cout << endl;
+
+    cout << "Midfielder: " << players[3]->get_name();
+    if(fantasy_team->is_capitan(players[3]))
+        cout << " " << CAPTAIN_STRING;
+    cout << endl;
+
+    cout << "Striker: " << players[4]->get_name();
+    if(fantasy_team->is_capitan(players[4]))
+        cout << " " << CAPTAIN_STRING;
+    cout << endl;
+
     /////////////////////////////////// need to be deleted /////////////////////////////////////////
 
-    cout << "Total score: " << fantasy_team->get_score() << endl;
+    cout << "Total Points: " << fantasy_team->get_score() << endl;
+    cout << "Team Cost: " << get_total_cost_of_fantasy_team(fantasy_team) << endl;
 }
 
 void System::print_matches_result_league(int _week_number)
@@ -683,3 +704,23 @@ void System::show_price(string player_name)
     cout << player->get_player_price() << endl;
 }
 
+void System::set_capitan(string player_name)
+{
+    if(current_user == nullptr)
+        throw Bad_request();
+    Player* player = find_player(player_name);
+    if(player == nullptr)
+        throw Not_Found();
+    current_user->get_fantasy_team()->set_capitan(player);
+}
+
+double System::get_total_cost_of_fantasy_team(FantasyTeam* fantasy_team)
+{
+    double total_cost = 0;
+    vector<Player*> players = fantasy_team->get_fantasy_team_players();
+    for(auto player : players)
+    {
+        total_cost += player->get_player_price();
+    }
+    return total_cost;
+}
