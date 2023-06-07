@@ -455,14 +455,14 @@ void Week::update_scores()
         {
             for(auto y : x.first)
             {
-                if(is_OWN_GOAL(y.first))
+                if(is_OWN_GOAL(y.first,i))
                 {
                     y.second -= DEFULT_OWN_GOAL_SCORE;
                 }
             }
             for(auto y : x.second)
             {
-                if(is_OWN_GOAL(y.first))
+                if(is_OWN_GOAL(y.first,i))
                 {
                     y.second -= DEFULT_OWN_GOAL_SCORE;
                 }
@@ -494,20 +494,34 @@ void Week::update_scores()
 }
 
 
-void Week::is_OWN_GOAL(string player_name)
+// bool Week::is_OWN_GOAL(string player_name , int row_number)
+// {
+//     for(auto x : goal_with_assist)
+//     {
+//         for(auto y : x)
+//         {
+//             if(y.first == player_name && y.second == OWN_GOAL_STRING)
+//             {
+//                 return true;
+//             }
+//         }
+//     }
+//     return false;
+// }
+
+
+bool Week::is_OWN_GOAL(string player_name , int row_number)
 {
-    for(auto x : goal_with_assist)
+    for(auto x : goal_with_assist[row_number])
     {
-        for(auto y : x)
+        if(x.first == player_name && x.second == OWN_GOAL_STRING)
         {
-            if(y.first == player_name && y.second == OWN_GOAL_STRING)
-            {
-                return true;
-            }
+            return true;
         }
     }
     return false;
 }
+
 
 int Week::number_of_goal_total(string player_name)
 {

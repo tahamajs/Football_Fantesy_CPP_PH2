@@ -22,9 +22,14 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
     
     if (!player->get_can_be_sold(week_number))
     {
-        
         throw Player_not_available();
     }
+
+    if(!check_price(player))
+    {
+        throw Bad_request();
+    }
+
     if (player->get_type() == FORWARD && tws == OPEN)
     {
         if (Forward_player == NULL)
@@ -32,6 +37,7 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
             Forward_player = player;
             add_count_week[week_number]++;
             number_of_player++;
+            price -= player->get_player_price();
         }
         else
         {
@@ -45,6 +51,7 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
             Midfielder_player = player;
             add_count_week[week_number]++;
             number_of_player++;
+            price -= player->get_player_price();
         }
         else
         {
@@ -58,12 +65,14 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
             Defender_1_player = player;
             add_count_week[week_number]++;
             number_of_player++;
+            price -= player->get_player_price();
         }
         else if (Defender_2_player == NULL)
         {
             Defender_2_player = player;
             add_count_week[week_number]++;
             number_of_player++;
+            price -= player->get_player_price();
         }
         else
         {
@@ -77,6 +86,7 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
             Goalkeeper_player = player;
             add_count_week[week_number]++;
             number_of_player++;
+            price -= player->get_player_price();
         }
         else
         {
@@ -219,6 +229,30 @@ bool FantasyTeam::is_in_team(Player *player)
         return true;
     }
     else if (Goalkeeper_player != NULL && Goalkeeper_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void FantasyTeam::set_capitan(Player *player)
+{
+    if (is_in_team(player))
+    {
+        Captain_player = player;
+    }
+    else
+    {
+        throw Not_Found();
+    }
+}
+
+bool FantasyTeam::check_price(Player *player)
+{
+    if (player->get_player_price() <= price)
     {
         return true;
     }

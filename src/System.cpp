@@ -682,3 +682,4 @@ void System::show_price(string player_name)
         throw Not_Found();
     cout << player->get_player_price() << endl;
 }
+

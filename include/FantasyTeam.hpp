@@ -21,6 +21,7 @@ public:
     double get_score(){return score;}
     int get_price(){return price;}
     void set_capitan(Player* player);
+    bool check_price(Player* player);
 
 private:
     string team_name;
@@ -42,5 +43,5 @@ private:
     int add_count_week[NUMBER_OF_WEEK] = {};
     
 
-    
+
 };
