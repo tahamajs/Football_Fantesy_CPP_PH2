@@ -7,6 +7,10 @@
 class DefenderPlayer : public Player
 {
 public:
+    DefenderPlayer(string name, double score , enum Player_type type) : Player(name, score, type){}
+
+
+
     void increase_goals(int _goals){ goals += _goals; }
     int get_goals(){ return goals; }
     void increase_assists_goals(int _assists_goals){ assists_goals += _assists_goals; }

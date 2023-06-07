@@ -84,8 +84,15 @@ void System::init_main_teams()
         vector<string> Goalkeeper_players = split(splitted_line_team[1], ';');
         for (auto player : Goalkeeper_players)
         {
-            string name = player;
-            Player* new_player = new Player(name, DEFULT_SCORE, GOALKEEPER);
+            vector<string> temp = split(player, ':');
+            string name = temp[0];
+
+            //check .....................................................
+            double price = stod(temp[1].erase(temp[1].find('$'), 1));
+
+
+            Player* new_player = new GoalkeeperPlayer(name, DEFULT_SCORE, GOALKEEPER);
+            new_player->set_player_price(price);
             playerTemp.push_back(new_player);
             this->players.push_back(new_player);
         }
@@ -93,8 +100,16 @@ void System::init_main_teams()
         vector<string> Defender_players = split(splitted_line_team[2], ';');
         for (auto player : Defender_players)
         {
-            string name = player;
-            Player* new_player = new Player(name, DEFULT_SCORE, DEFENDER);
+            // string name = player;
+            vector<string> temp = split(player, ':');
+            string name = temp[0];
+            
+            //check .....................................................
+            double price = stod(temp[1].erase(temp[1].find('$'), 1));
+
+
+            Player* new_player = new DefenderPlayer(name, DEFULT_SCORE, DEFENDER);
+            new_player->set_player_price(price);
             playerTemp.push_back(new_player);
             this->players.push_back(new_player);
         }
@@ -102,8 +117,16 @@ void System::init_main_teams()
         vector<string> Midfielder_players = split(splitted_line_team[3], ';');
         for (auto player : Midfielder_players)
         {
-            string name = player;
-            Player* new_player = new Player(name, DEFULT_SCORE, MIDFIELDER);
+            // string name = player;
+            vector<string> temp = split(player, ':');
+            string name = temp[0];
+
+            //check .....................................................
+            double price = stod(temp[1].erase(temp[1].find('$'), 1));
+
+
+            Player* new_player = new MidfielderPlayer(name, DEFULT_SCORE, MIDFIELDER);
+            new_player->set_player_price(price);
             playerTemp.push_back(new_player);
             this->players.push_back(new_player);
         }
@@ -111,8 +134,16 @@ void System::init_main_teams()
         vector<string> Forward_players = split(splitted_line_team[4], ';');
         for (auto player : Forward_players)
         {
-            string name = player;
-            Player* new_player = new Player(name, DEFULT_SCORE, FORWARD);
+            // string name = player;
+            vector<string> temp = split(player, ':');
+            string name = temp[0];
+
+            //check .....................................................
+            double price = stod(temp[1].erase(temp[1].find('$'), 1));
+
+
+            Player* new_player = new ForwardPlayer(name, DEFULT_SCORE, FORWARD);
+            new_player->set_player_price(price);
             playerTemp.push_back(new_player);
             this->players.push_back(new_player);
         }
@@ -148,13 +179,20 @@ void System::init_weeks()
 
         string line;
         //for each line
-        vector<pair<Player*,double>> scores ;
+        // vector<pair<Player*,double>> scores ;
+        vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > players_of_team ;
+        vector<vector<pair<string ,string>>> goal_with_assist ;
+
+        // vector<pair<string,double>> team1;
+        // vector<pair<string,double>> team2;
+
         vector<string> yellow_card;
         vector<string> red_card;
         vector<string> injure;
         vector<Match*> match;
         getline(file, line);
         //for first line
+
 
         while (getline(file, line))
         {
@@ -168,37 +206,44 @@ void System::init_weeks()
             vector<string> yellow_card_temp = split(splitted_line[3], ';');
             vector<string> red_card_temp = split(splitted_line[4], ';');
             vector<string> injure_temp = split(splitted_line[2], ';');
-            vector<string> players_temp = split(splitted_line[5], ';');
+            vector<string> goal_with_assist_temp = split(splitted_line[5], ';');
+            vector<string> team1_temp = split(splitted_line[6], ';');
+            vector<string> team2_temp = split(splitted_line[7], ';');
+            vector<pair<string,string>> goal_assist = {};
 
-            for(int i = 0 ; i < players_temp.size() ; i ++)
+            for(auto player : goal_with_assist_temp)
             {
-                vector<string> player_tmp = split(players_temp[i] , ':');
-                double score = stod(player_tmp[1]);
-                pair<Player*,double> score_tmp;
-
-                
-
-                score_tmp.first = find_player(player_tmp[0]);
-                score_tmp.second = score;
-
-
-
-
-                /////////////////////////////////////////////////   delete   /////////////////////////////////////////////////
-                // cout << player_tmp[0] << " " << player_tmp[1] << " " << score_tmp.second << endl;
-                /////////////////////////////////////////////////   delete   /////////////////////////////////////////////////
-                
-                
-                
-                
-                if(score_tmp.first != nullptr)
-                    scores.push_back(score_tmp);
+                vector<string> goal_with_assist_temp2 = split(player, ':');
+                pair<string,string> pair_temp = make_pair(goal_with_assist_temp2[0],goal_with_assist_temp2[1]);
+                goal_assist.push_back(pair_temp);
             }
+            goal_with_assist.push_back(goal_assist);
+
+
+            vector<pair<string,double>> team1;
+            for(auto player : team1_temp)
+            {
+                ///////////////////////////////////////////////////////////////// need to be correct ///////////////////////////////////////////////////
+                pair<string,double> pair_temp = make_pair(player,DEFULT_SCORE);
+                team1.push_back(pair_temp);
+            }
+            vector<pair<string,double>> team2;
+            for(auto player : team2_temp)
+            {
+                ///////////////////////////////////////////////////////////////// need to be correct ///////////////////////////////////////////////////
+                pair<string,double> pair_temp = make_pair(player,DEFULT_SCORE);
+                team2.push_back(pair_temp);
+            }
+            
+            players_of_team.push_back(make_pair(team1,team2));
+
+
+            
             yellow_card.insert(yellow_card.end(), yellow_card_temp.begin(), yellow_card_temp.end());
             red_card.insert(red_card.end(), red_card_temp.begin(), red_card_temp.end());
             injure.insert(injure.end(), injure_temp.begin(), injure_temp.end());
         }
-        weeks.push_back(new Week(i+1, scores ,match, yellow_card, red_card, injure));
+        weeks.push_back(new Week(i+1,goal_with_assist ,players_of_team ,match, yellow_card, red_card, injure));
     }
 }
 
@@ -509,8 +554,17 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         {
             cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_GOALKEEPER_INSTRUCTION << " | " << "score: " ;
             // printf("%.1f\n", player->get_average_score()) << pla;
-            printf("%.1f\n", player->get_average_score()); 
+            printf("%.1f", player->get_average_score()); 
             // cout<<   player->get_score();
+
+            //downcast to GoalkeeperPlayer
+            GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
+            cout << " | " << "clean sheets: " << goalkeeper_player->get_clean_sheet() << endl;
+
+
+
+
+
         }
     }
     else if(_type == SUMMERIES_DEFENDER_INSTRUCTION)
@@ -519,9 +573,13 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         for(auto player : players)
         {
             cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_DEFENDER_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f\n", player->get_average_score());
+            printf("%.1f", player->get_average_score());
             // printf("%.1f", player->get_average_score());
             // cout << " " << player->get_score() << endl;
+
+            // downcast to DefenderPlayer
+            DefenderPlayer* defender_player = dynamic_cast<DefenderPlayer*>(player);
+            cout << " | " << "goals: " << defender_player->get_goals() << " | " << "assists: " << defender_player->get_assists_goals() << " | " << "clean sheets: " << defender_player->get_clean_sheet() << endl;
         }
     }
     else if(_type == SUMMERIES_MIDFIELDER_INSTRUCTION)
@@ -530,7 +588,12 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         for(auto player : players)
         {
             cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_MIDFIELDER_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f\n", player->get_average_score());
+            printf("%.1f", player->get_average_score());
+
+            // downcast to MidfielderPlayer
+            MidfielderPlayer* midfielder_player = dynamic_cast<MidfielderPlayer*>(player);
+            cout << " | " << "goals: " << midfielder_player->get_goals() << " | " << "assists: " << midfielder_player->get_assists_goals() << " | " << "clean sheets: " << midfielder_player->get_clean_sheet() << endl;
+
         }
     }
     else if(_type == SUMMERIES_FORWARD_INSTRUCTION)
@@ -539,7 +602,12 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         for(auto player : players)
         {
             cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_FORWARD_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f\n", player->get_average_score());
+            printf("%.1f", player->get_average_score());
+
+            // downcast to ForwardPlayer
+            ForwardPlayer* forward_player = dynamic_cast<ForwardPlayer*>(player);
+            cout << " | " << "goals: " << forward_player->get_goals() << " | " << "assists: " << forward_player->get_assists_goals() << endl;
+
         }
     }
     else if (_type == "")
@@ -605,4 +673,12 @@ void System::print_players()
     {
         cout << player->get_name() << " " << player->get_score() << "\n";
     }
+}
+
+void System::show_price(string player_name)
+{
+    Player* player = find_player(player_name);
+    if(player == nullptr)
+        throw Not_Found();
+    cout << player->get_player_price() << endl;
 }

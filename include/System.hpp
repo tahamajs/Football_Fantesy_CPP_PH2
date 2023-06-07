@@ -39,6 +39,7 @@ public:
     void print_users_ranking();
     void print_main_team_players(string team_name ,string type ,bool rank);
     void print_league_standings();
+    void show_price(string player_name);
 
     void print_week_1();
     void print_players();

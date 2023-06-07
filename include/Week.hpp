@@ -21,7 +21,7 @@ using namespace std;
 class Week
 {
 public:
-    Week(int week_number ,vector<vector<pair<pair<string,double>,pair<string,double>>>> goal_with_assist , vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > players_of_team , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players);
+    Week(int week_number ,vector<vector<pair<string,string>>> goal_with_assist , vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > players_of_team , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players);
 
     void add_match(MainTeam* team1, MainTeam* team2 , int result1 , int result2);
     vector<Match*> get_matches(){return matches;}
@@ -39,6 +39,9 @@ public:
     double score_calculator(double x);
     int number_of_goal(string player_name , int row_number);
     int number_of_assist(string player_nam , int row_number);
+    bool is_OWN_GOAL(string player_name , int row_number);
+    int number_of_goal_total(string player_name);
+    int number_of_assist_total(string player_name);
 
 
 
@@ -53,7 +56,7 @@ private:
     vector<string> Yellow_cards;
     vector<string> injured_players;
 
-    vector <vector<pair<pair<string,double>,pair<string,double>>>> goal_with_assist;
+    vector <vector<pair<string,string>>> goal_with_assist;
     vector <pair<vector<pair<string,double>>,vector<pair<string,double>>>> players_of_team;
 
 

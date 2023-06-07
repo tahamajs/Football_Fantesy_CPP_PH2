@@ -1,6 +1,6 @@
 #include "../include/Week.hpp"
 
-Week::Week(int week_number ,vector<vector<pair<pair<string,double>,pair<string,double>>>> _goal_with_assist , vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > _players_of_team , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players)
+Week::Week(int week_number ,vector<vector<pair<string,string>>> _goal_with_assist , vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > _players_of_team , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players)
 {
     this->week_number = week_number;
     this->goal_with_assist = _goal_with_assist;
@@ -87,13 +87,14 @@ void Week::update_players()
                     Player* player = find_player(player_of_team.first);
                     player->set_score(player_of_team.second);
                 
-                    //  for set goal for goal assist and clean sheet for goalkeeper
-                    if(player->get_type() == GOALKEEPER)
-                    {
-                        //downcast player :
-                        GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
-                    }
 
+
+
+
+
+                    player->increase_assists_goals(number_of_assist(player_of_team.first , 0));
+                    player->increase_goals(number_of_goal(player_of_team.first , 0));
+                    player->increase_clean_sheet(matches[0]->get_result1() == 0);
 
 
 
@@ -110,9 +111,18 @@ void Week::update_players()
             {
                 if(find_player(player_of_team.first) != nullptr)
                 {
-                    find_player(player_of_team.first)->set_score(player_of_team.second);
-                }
+                    Player* player = find_player(player_of_team.first);
+                    player->set_score(player_of_team.second);
+                
 
+
+
+                    player->increase_assists_goals(number_of_assist(player_of_team.first , 0));
+                    player->increase_goals(number_of_goal(player_of_team.first , 0));
+                    player->increase_clean_sheet(matches[0]->get_result1() == 0);
+
+                    
+                }
 
 
 
@@ -242,7 +252,7 @@ int Week::number_of_goal(string player_name , int row_number)
     int number_of_goal = 0;
     for(auto gwa : this->goal_with_assist[row_number])
     {
-        if(gwa.first.first == player_name)
+        if(gwa.first == player_name)
         {
             number_of_goal++;
         }
@@ -254,7 +264,7 @@ int Week::number_of_assist(string player_name , int row_number)
     int number_of_assist = 0;
     for(auto gwa : this->goal_with_assist[row_number])
     {
-        if(gwa.second.first == player_name)
+        if(gwa.second == player_name)
         {
             number_of_assist++;
         }
@@ -346,7 +356,15 @@ void Week::update_scores()
             players_of_team[i].second[0].second -= matches[i]->get_result2();
         }
 
+
+
+    //????????????????????????????????????????  ???????????????????????????
+        players_of_team[i].first[0].second += DEFULT_SCORE_GOALKEEPER_IN_WEEK;
+        players_of_team[i].second[0].second += DEFULT_SCORE_GOALKEEPER_IN_WEEK;
+    //????????????????????????????????????????  ???????????????????????????
+
         ////////////////////////////// need to be currect //////////////////////////////
+
 
 
         //goals and assist for defenders
@@ -371,7 +389,9 @@ void Week::update_scores()
             players_of_team[i].first[j].second += number_of_assist(players_of_team[i].first[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_DEFENDER;
             players_of_team[i].second[j].second += number_of_goal(players_of_team[i].second[j].first , i) * DEFULT_GOAL_SCORE_DEFENDER;
             players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_DEFENDER;
-            
+
+            players_of_team[i].first[j].second += DEFULT_SCORE_DEFENDER_IN_WEEK;
+            players_of_team[i].second[j].second += DEFULT_SCORE_DEFENDER_IN_WEEK;
         }
 
 
@@ -431,10 +451,22 @@ void Week::update_scores()
         /////////// for own goal ///////////
 
         /////////// need to be check ///////////
-        for(auto x : goal_with_assist[i])
+        for(auto x : players_of_team)
         {
-            if(x.second.first == OWN_GOAL_STRING)
-                x.first.second -= DEFULT_OWN_GOAL_SCORE;
+            for(auto y : x.first)
+            {
+                if(is_OWN_GOAL(y.first))
+                {
+                    y.second -= DEFULT_OWN_GOAL_SCORE;
+                }
+            }
+            for(auto y : x.second)
+            {
+                if(is_OWN_GOAL(y.first))
+                {
+                    y.second -= DEFULT_OWN_GOAL_SCORE;
+                }
+            }
         }
         /////////// need to be check ///////////
 
@@ -462,4 +494,48 @@ void Week::update_scores()
 }
 
 
+void Week::is_OWN_GOAL(string player_name)
+{
+    for(auto x : goal_with_assist)
+    {
+        for(auto y : x)
+        {
+            if(y.first == player_name && y.second == OWN_GOAL_STRING)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
+int Week::number_of_goal_total(string player_name)
+{
+    int number_of_goal = 0;
+    for(auto x : goal_with_assist)
+    {
+        for(auto y : x)
+        {
+            if(y.first == player_name)
+            {
+                number_of_goal++;
+            }
+        }
+    }
+    return number_of_goal;
+}
+
+int Week::number_of_assist_total(string player_name )
+{
+    int number_of_assist = 0;
+    for(auto x : goal_with_assist)
+    {
+        for(auto y : x)
+        {
+            if(y.second == player_name)
+            {
+                number_of_assist++;
+            }
+        }
+    }
+}
