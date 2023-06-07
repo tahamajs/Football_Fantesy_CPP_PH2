@@ -491,4 +491,8 @@ void InputHandler::set_captan()
     print_successfull_massage();
 }
 
-
+void InputHandler::show_budget()
+{
+    system->show_budget();
+    print_successfull_massage();
+}

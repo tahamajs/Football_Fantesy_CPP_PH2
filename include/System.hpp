@@ -43,7 +43,7 @@ public:
     void set_capitan(string player_name);
     void print_week_1();
     void print_players();
-    
+    void show_budget();
 
 private:
     void init_main_teams();
@@ -56,6 +56,7 @@ private:
     FantasyTeam* find_fantasy_team(string team_name);
     vector<User*> get_user_ranks();
     double get_total_cost_of_fantasy_team(FantasyTeam* fantasy_team);
+
 
     vector<User*> users;
     vector<MainTeam*> main_teams;

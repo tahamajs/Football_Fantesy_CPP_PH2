@@ -724,3 +724,10 @@ double System::get_total_cost_of_fantasy_team(FantasyTeam* fantasy_team)
     }
     return total_cost;
 }
+
+void System::show_budget()
+{
+    if(current_user == nullptr)
+        throw Bad_request();
+    cout << current_user->get_fantasy_team()->get_budget() << endl;
+}

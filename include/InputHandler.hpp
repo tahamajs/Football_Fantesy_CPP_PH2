@@ -23,6 +23,7 @@ const string TEAM_OF_THE_WEEK = "team_of_the_week";
 const string PLAYERS = "players";
 const string LEAGUE_STANDING = "league_standings";
 const string USER_RANKING = "users_ranking";
+const string SHOW_BUDGET = "show_budget";
 const string SHOW_MATCH_RESULT = "matches_result_league";
 const string LOGIN_ADMIN = "register_admin";
 const string SELL_PLAYER = "sell_player";
@@ -70,6 +71,7 @@ private:
     void show_league_standings();
     void show_users_ranking();
     void show_match_result();
+    void show_budget();
     bool check_reapeted_input_type(const vector<string> &inputs_type);
     bool cmnd_end_check();
     bool has_empty_field(const vector<string> &inputs, const vector<string> &needed_inputs);
@@ -108,6 +110,7 @@ private:
         {LEAGUE_STANDING, &InputHandler::show_league_standings},
         {USER_RANKING, &InputHandler::show_users_ranking},
         {SHOW_MATCH_RESULT, &InputHandler::show_match_result},
-        {SHOW_FANTASY_TEAM, &InputHandler::show_fantasy_team}
+        {SHOW_FANTASY_TEAM, &InputHandler::show_fantasy_team},
+        {SHOW_BUDGET, &InputHandler::show_budget}
     };
 };
