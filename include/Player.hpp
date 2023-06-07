@@ -30,6 +30,12 @@ public:
     int get_player_price(){return player_price;}
     void set_player_price(int _player_price){player_price = _player_price;}
     
+
+
+    void virtual increase_goals(int _goals) = 0;
+    void virtual increase_assists_goals(int _assists_goals) = 0;
+    void virtual increase_clean_sheet(int _clean_sheet) = 0;
+    
 private: 
     string name ;
     double score = 0;

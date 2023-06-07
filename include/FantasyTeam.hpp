@@ -20,6 +20,7 @@ public:
     vector<Player*> get_fantasy_team_players();
     double get_score(){return score;}
     int get_price(){return price;}
+    void set_capitan(Player* player);
 
 private:
     string team_name;
@@ -29,8 +30,11 @@ private:
     Player* Defender_1_player;
     Player* Defender_2_player;
     Player* Goalkeeper_player;
+    Player* Captain_player;
     int number_of_player = 0;
     bool is_full_yet = false;
+
+    bool is_in_team(Player* player);
 
     int price = DEFULT_FANTASY_TEAM_PRICE;
 

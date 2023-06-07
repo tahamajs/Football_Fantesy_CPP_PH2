@@ -22,6 +22,7 @@ void FantasyTeam::add_player(Player *player, Teansfare_window_status tws, int we
     
     if (!player->get_can_be_sold(week_number))
     {
+        
         throw Player_not_available();
     }
     if (player->get_type() == FORWARD && tws == OPEN)
@@ -197,4 +198,32 @@ vector<Player *> FantasyTeam::get_fantasy_team_players()
 
 
     return fantasy_team_players;
+}
+
+bool FantasyTeam::is_in_team(Player *player)
+{
+    if (Forward_player != NULL && Forward_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else if (Midfielder_player != NULL && Midfielder_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else if (Defender_1_player != NULL && Defender_1_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else if (Defender_2_player != NULL && Defender_2_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else if (Goalkeeper_player != NULL && Goalkeeper_player->get_name() == player->get_name())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

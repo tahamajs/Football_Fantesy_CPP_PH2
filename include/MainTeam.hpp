@@ -29,6 +29,7 @@ public:
     int get_goal_difference(){return goal_for - goal_against;}
     int get_goal_for(){return goal_for;}
     int get_goal_against(){return goal_against;}
+    
 
 
     // need to be deleted

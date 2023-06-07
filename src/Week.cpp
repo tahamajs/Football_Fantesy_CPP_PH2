@@ -1,15 +1,18 @@
 #include "../include/Week.hpp"
 
-Week::Week(int week_number , vector< pair<Player*,double> > _scores , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players)
+Week::Week(int week_number ,vector<vector<pair<pair<string,double>,pair<string,double>>>> _goal_with_assist , vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > _players_of_team , vector<Match*> matches , vector<string> Red_cards , vector<string> Yellow_cards , vector<string> injured_players)
 {
     this->week_number = week_number;
-    this->scores = _scores;
+    this->goal_with_assist = _goal_with_assist;
+    this->players_of_team = _players_of_team;
     this->matches = matches;
     this->Red_cards = Red_cards;
     this->Yellow_cards = Yellow_cards;
     this->injured_players = injured_players;
     update_type_players();
 }
+
+
 void Week::add_match(MainTeam* team1, MainTeam* team2 , int result1 , int result2)
 {
     Match* match = new Match(team1 , team2 , result1 , result2);
@@ -60,36 +63,76 @@ Player* Week::find_player(string player_name)
 
 
 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
+
 
 void Week::update_players()
 {
+    update_scores();
     for(auto score : this->scores)
     {
         // cout << scores.size()<< endl;
-        score.first->set_score(score.second);
-        score.first->increase_score(score.second);
+        // score.first->set_score(score.second);
+        // score.first->increase_score(score.second);
 
         //////////////////////////////
         // cout << score.first->get_name()  << " score: " << score.second << " " << score.first->get_score() << endl;
         //////////////////////////////
+
+        for(auto players_team : this->players_of_team)
+        {
+            for(auto player_of_team : players_team.first)
+            {
+                if(find_player(player_of_team.first) != nullptr)
+                {
+                    Player* player = find_player(player_of_team.first);
+                    player->set_score(player_of_team.second);
+                
+                    //  for set goal for goal assist and clean sheet for goalkeeper
+                    if(player->get_type() == GOALKEEPER)
+                    {
+                        //downcast player :
+                        GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
+                    }
+
+
+
+
+
+
+
+
+
+
+
+                }
+            }
+            for(auto player_of_team : players_team.second)
+            {
+                if(find_player(player_of_team.first) != nullptr)
+                {
+                    find_player(player_of_team.first)->set_score(player_of_team.second);
+                }
+
+
+
+
+
+
+
+
+
+
+                
+            }
+        }
+
+
+
+
+
+
+
+
     }
     for(auto red_card : this->Red_cards)
     {
@@ -194,6 +237,31 @@ void Week::update_matchs()
     }
 }
 
+int Week::number_of_goal(string player_name , int row_number)
+{
+    int number_of_goal = 0;
+    for(auto gwa : this->goal_with_assist[row_number])
+    {
+        if(gwa.first.first == player_name)
+        {
+            number_of_goal++;
+        }
+    }
+}
+
+int Week::number_of_assist(string player_name , int row_number)
+{
+    int number_of_assist = 0;
+    for(auto gwa : this->goal_with_assist[row_number])
+    {
+        if(gwa.second.first == player_name)
+        {
+            number_of_assist++;
+        }
+    }
+}
+
+
 
 
 
@@ -209,3 +277,189 @@ void Week::print_week()
         cout << score.first->getName() << " " << score.second << endl;
     }
 }
+
+double Week::score_calculator(double x)
+{
+    return 10.0 / (1.0 + exp(-x / 6.0));
+}
+
+
+void Week::update_scores()
+{
+    vector<pair<pair<string,double>,pair<string,double>>> goals_assist_temp ;
+    pair<vector<pair<string,double>>,vector<pair<string,double>>> players_of_team_temp;
+    for (int i = 0; i < 10; i++)
+    {
+        //defult value of win or draw
+        if(matches[i]->get_result1() > matches[i]->get_result2())
+        {
+            //team 1 win 
+            for(auto x : players_of_team[i].first)
+            {
+                x.second += DEFULT_WIN_SCORE_WEEK;
+            }
+            for(auto x : players_of_team[i].second)
+            {
+                x.second += DEFULT_LOSE_SCORE_WEEK;
+            }
+        }
+        else if(matches[i]->get_result1() == matches[i]->get_result2())
+        {
+            for(auto x : players_of_team[i].first)
+            {
+                x.second += DEFULT_DRAW_SCORE_WEEK;
+            }
+            for(auto x : players_of_team[i].second)
+            {
+                x.second += DEFULT_DRAW_SCORE_WEEK;
+            }
+        }
+        else
+        {
+            for(auto x : players_of_team[i].second)
+            {
+                x.second += DEFULT_WIN_SCORE_WEEK;
+            }
+            for(auto x : players_of_team[i].first)
+            {
+                x.second += DEFULT_LOSE_SCORE_WEEK;
+            }
+        }
+
+        //goals and assist for goalkeeper
+        if(matches[i]->get_result1() == 0)
+        {
+            players_of_team[i].first[0].second += DEFULT_GOALKEEPER_CLEAN_SHEET_SCORE_WEEK;
+        }
+        else
+        {
+            players_of_team[i].first[0].second -= matches[i]->get_result1();
+        }
+
+
+        if(matches[i]->get_result2() == 0)
+        {
+            players_of_team[i].second[0].second += DEFULT_GOALKEEPER_CLEAN_SHEET_SCORE_WEEK;
+        }
+        else
+        {
+            players_of_team[i].second[0].second -= matches[i]->get_result2();
+        }
+
+        ////////////////////////////// need to be currect //////////////////////////////
+
+
+        //goals and assist for defenders
+        if(matches[i]->get_result1() == 0)
+        {
+            for (int j = 1; j < 5; j++)
+            {
+                players_of_team[i].first[j].second += DEFULT_DEFENDER_CLEAN_SHEET_SCORE_WEEK;
+            }
+
+        }
+        if(matches[i]->get_result2() == 0)
+        {
+            for(int j = 1; j < 5; j++)
+            {
+                players_of_team[i].second[j].second += DEFULT_DEFENDER_CLEAN_SHEET_SCORE_WEEK;
+            }
+        }
+        for (int j = 1; j < 5; j++)
+        {
+            players_of_team[i].first[j].second += number_of_goal(players_of_team[i].first[j].first , i) * DEFULT_GOAL_SCORE_DEFENDER;
+            players_of_team[i].first[j].second += number_of_assist(players_of_team[i].first[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_DEFENDER;
+            players_of_team[i].second[j].second += number_of_goal(players_of_team[i].second[j].first , i) * DEFULT_GOAL_SCORE_DEFENDER;
+            players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_DEFENDER;
+            
+        }
+
+
+        //goals and assist for midfielders
+
+        if(matches[i]->get_result1() == 0)
+        {
+            for (int j = 5; j < 8; j++)
+            {
+                players_of_team[i].first[j].second += DEFULT_MIDFIELDER_CLEAN_SHEET_SCORE_WEEK;
+            }
+
+        }
+        if(matches[i]->get_result2() == 0)
+        {
+            for(int j = 5; j < 8; j++)
+            {
+                players_of_team[i].second[j].second += DEFULT_MIDFIELDER_CLEAN_SHEET_SCORE_WEEK;
+            }
+        }
+        for(int j = 5; j < 8; j++)
+        {
+            ////////////////////////////// need to be check //////////////////////////////
+            players_of_team[i].first[j].second += number_of_goal(players_of_team[i].first[j].first , i) * DEFULT_GOAL_SCORE_MIDFIELDER;
+            players_of_team[i].first[j].second += number_of_assist(players_of_team[i].first[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_MIDFIELDER;
+            players_of_team[i].second[j].second += number_of_goal(players_of_team[i].second[j].first , i) * DEFULT_GOAL_SCORE_MIDFIELDER;
+            players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_MIDFIELDER;
+        }
+
+
+
+        //goals and assist for forwards
+
+        for(int j=8 ; j<12 ; j++)
+        {
+            if(number_of_goal(players_of_team[i].first[j].first , i) == 0)
+            {
+                players_of_team[i].first[j].second -= DEFULT_NOT_GOAL_SCORE_FORWARD;
+            }
+            else
+            {
+                players_of_team[i].first[j].second += number_of_goal(players_of_team[i].first[j].first , i) * DEFULT_GOAL_SCORE_FORWARD;
+            }
+            if(number_of_goal(players_of_team[i].second[j].first , i) == 0)
+            {
+                players_of_team[i].second[j].second -= DEFULT_NOT_GOAL_SCORE_FORWARD;
+            }
+            else
+            {
+                players_of_team[i].second[j].second += number_of_goal(players_of_team[i].second[j].first , i) * DEFULT_GOAL_SCORE_FORWARD;
+            }
+
+            players_of_team[i].first[j].second += number_of_assist(players_of_team[i].first[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_FORWARD;
+            players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first , i) * DEFULT_GOAL_ASSIST_SCORE_FORWARD;
+        }
+        
+        /////////// for own goal ///////////
+
+        /////////// need to be check ///////////
+        for(auto x : goal_with_assist[i])
+        {
+            if(x.second.first == OWN_GOAL_STRING)
+                x.first.second -= DEFULT_OWN_GOAL_SCORE;
+        }
+        /////////// need to be check ///////////
+
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////// need to complete ///////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        
+        
+        
+
+        
+    }
+
+    
+}
+
+
+
