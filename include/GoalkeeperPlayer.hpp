@@ -8,6 +8,9 @@ class GoalkeeperPlayer : public Player
 {
 public:
     GoalkeeperPlayer(string name, double score , enum Player_type type) : Player(name, score, type){}
+    ~GoalkeeperPlayer(){}
+
+
     void increase_clean_sheet(int _clean_sheet){ clean_sheet += _clean_sheet; }
     int get_clean_sheet(){ return clean_sheet; }
 

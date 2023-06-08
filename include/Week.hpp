@@ -25,7 +25,6 @@ public:
 
     void add_match(MainTeam* team1, MainTeam* team2 , int result1 , int result2);
     vector<Match*> get_matches(){return matches;}
-    vector< pair<Player*,double> > get_scores(){return scores;}
     vector<string> get_Red_cards(){return Red_cards;}
     vector<string> get_Yellow_cards(){return Yellow_cards;}
     vector<string> get_injured_players(){return injured_players;}
@@ -42,16 +41,31 @@ public:
     bool is_OWN_GOAL(string player_name , int row_number);
     int number_of_goal_total(string player_name);
     int number_of_assist_total(string player_name);
+    void set_all_players(vector<Player*> players);
 
 
 
     // need to be deleted
     void print_week();
+    void print_goal_with_assist();
 
 private:
     int week_number;
     vector<Match*> matches;
-    vector< pair<Player*,double> > scores;
+
+
+
+
+
+    //need to be deleted
+    // vector< pair<Player*,double> > scores;
+
+    vector <Player* > All_playyers;
+
+
+
+
+
     vector<string> Red_cards;
     vector<string> Yellow_cards;
     vector<string> injured_players;

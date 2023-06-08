@@ -8,6 +8,7 @@ class DefenderPlayer : public Player
 {
 public:
     DefenderPlayer(string name, double score , enum Player_type type) : Player(name, score, type){}
+    ~DefenderPlayer(){}
 
 
 

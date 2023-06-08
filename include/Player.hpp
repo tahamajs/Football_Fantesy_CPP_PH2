@@ -14,7 +14,8 @@ class Player
 {
 public:
     Player(string name, double score , enum Player_type type);
-    string getName(){return name;}
+    virtual ~Player(){};
+
     double get_score(){return score;}
     const string& get_name(){return name;}
     enum Player_type get_type(){return type;}

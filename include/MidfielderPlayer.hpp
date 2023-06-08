@@ -8,7 +8,7 @@ class MidfielderPlayer : public Player
 {
 public:
     MidfielderPlayer(string name, double score , enum Player_type type) : Player(name, score, type){}
-
+    ~MidfielderPlayer(){}
 
     void increase_goals(int _goals){ goals += _goals; }
     int get_goals(){ return goals; }

@@ -6,17 +6,24 @@ System::System()
     this->current_user = nullptr;
     init_main_teams();
     init_weeks();
+
+    
+
+
+    // cout << "init_main_teams" << endl;
     
 
     // for(Player* _Player : players)
     // {
-    //     cout << _Player->get_name() << " " << _Player->get_score() << "\n";
+    //     cout << _Player->get_name() << " " << _Player->get_player_price() << "\n";
     // }
 
     // for(Week* week : weeks)
     // {
-        // weeks[0]->print_week();
+    //     week->print_week();
     // }
+    // weeks[0]->print_week();
+    // weeks[0]->print_goal_with_assist();
 
 }
 
@@ -244,6 +251,8 @@ void System::init_weeks()
             injure.insert(injure.end(), injure_temp.begin(), injure_temp.end());
         }
         weeks.push_back(new Week(i+1,goal_with_assist ,players_of_team ,match, yellow_card, red_card, injure));
+        weeks[i]->set_all_players(players);
+
     }
 }
 
@@ -692,7 +701,7 @@ void System::print_players()
 {
     for(auto player : players)
     {
-        cout << player->get_name() << " " << player->get_score() << "\n";
+        cout << player->get_name() << " " << fixed << setprecision(1) << player->get_score() << "\n";
     }
 }
 
@@ -729,5 +738,5 @@ void System::show_budget()
 {
     if(current_user == nullptr)
         throw Bad_request();
-    cout << current_user->get_fantasy_team()->get_budget() << endl;
+    cout << current_user->get_fantasy_team()->get_price() << endl;
 }

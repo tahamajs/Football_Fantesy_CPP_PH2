@@ -51,11 +51,11 @@ void Week::add_match(MainTeam* team1, MainTeam* team2 , int result1 , int result
 
 Player* Week::find_player(string player_name)
 {
-    for(auto score : this->scores)
+    for(auto player : this->All_playyers)
     {
-        if(score.first->getName() == player_name)
+        if(player->get_name() == player_name)
         {
-            return score.first;
+            return player;
         }
     }
     return nullptr;
@@ -68,8 +68,8 @@ Player* Week::find_player(string player_name)
 void Week::update_players()
 {
     update_scores();
-    for(auto score : this->scores)
-    {
+    // for(auto score : this->scores)
+    // {
         // cout << scores.size()<< endl;
         // score.first->set_score(score.second);
         // score.first->increase_score(score.second);
@@ -137,13 +137,7 @@ void Week::update_players()
         }
 
 
-
-
-
-
-
-
-    }
+    // }
     for(auto red_card : this->Red_cards)
     {
         Player* player = this->find_player(red_card);
@@ -218,23 +212,72 @@ vector< pair<Player*,double> > Week::get_best_team_week()
 void Week::update_type_players()
 {
     // pair<Player*,double> temp;
-    for(auto score : this->scores)
+    // for(auto score : this->scores)
+    // {
+    //     if(score.first->get_type() == DEFENDER)
+    //     {
+    //         this->defenders_players.push_back(score);
+    //     }
+    //     else if(score.first->get_type() == MIDFIELDER)
+    //     {
+    //         this->midfielders_players.push_back(score);
+    //     }
+    //     else if(score.first->get_type() == FORWARD)
+    //     {
+    //         this->forwards_players.push_back(score);
+    //     }
+    //     else if(score.first->get_type() == GOALKEEPER)
+    //     {
+    //         this->goalkeepers_players.push_back(score);
+    //     }
+    // }
+    for(auto player : players_of_team)
     {
-        if(score.first->get_type() == DEFENDER)
+        for(auto player1 : player.first)
         {
-            this->defenders_players.push_back(score);
+            if(find_player(player1.first) != nullptr)
+            {
+                Player* player2 = find_player(player1.first);
+                if(player2->get_type() == DEFENDER)
+                {
+                    this->defenders_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == MIDFIELDER)
+                {
+                    this->midfielders_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == FORWARD)
+                {
+                    this->forwards_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == GOALKEEPER)
+                {
+                    this->goalkeepers_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+            }
         }
-        else if(score.first->get_type() == MIDFIELDER)
+        for(auto player1 : player.second)
         {
-            this->midfielders_players.push_back(score);
-        }
-        else if(score.first->get_type() == FORWARD)
-        {
-            this->forwards_players.push_back(score);
-        }
-        else if(score.first->get_type() == GOALKEEPER)
-        {
-            this->goalkeepers_players.push_back(score);
+            if(find_player(player1.first) != nullptr)
+            {
+                Player* player2 = find_player(player1.first);
+                if(player2->get_type() == DEFENDER)
+                {
+                    this->defenders_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == MIDFIELDER)
+                {
+                    this->midfielders_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == FORWARD)
+                {
+                    this->forwards_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+                else if(player2->get_type() == GOALKEEPER)
+                {
+                    this->goalkeepers_players.push_back(make_pair(find_player(player1.first),player1.second));
+                }
+            }
         }
     }
 }
@@ -257,6 +300,7 @@ int Week::number_of_goal(string player_name , int row_number)
             number_of_goal++;
         }
     }
+    return number_of_goal;
 }
 
 int Week::number_of_assist(string player_name , int row_number)
@@ -269,6 +313,7 @@ int Week::number_of_assist(string player_name , int row_number)
             number_of_assist++;
         }
     }
+    return number_of_assist;                            
 }
 
 
@@ -281,12 +326,29 @@ void Week::print_week()
 {
     cout << endl << "Week " << this->week_number << ":" << endl;
     cout << "Scores:" << endl;
-    cout << "size of scores: " << this->scores.size() << endl;
-    for(auto score : this->scores)
+    // cout << "size of scores: " << this->scores.size() << endl;
+    for(auto player : this->players_of_team)
     {
-        cout << score.first->getName() << " " << score.second << endl;
+        cout << "team1:" << endl;
+        for(auto player1 : player.first)
+        {
+            if(find_player(player1.first) != nullptr)
+                cout << player1.first << " " << find_player(player1.first)->get_player_price() << endl;
+            else
+                cout << player1.first << " " << "mmmmmm" << endl;
+        }
+        cout << "team2:" << endl;
+        for(auto player1 : player.second)
+        {
+            if(find_player(player1.first) != nullptr)
+                cout << player1.first << " " << find_player(player1.first)->get_player_price() << endl;
+            else
+                cout << player1.first << " " << "mmmmmm" << endl;
+        }
     }
 }
+
+
 
 double Week::score_calculator(double x)
 {
@@ -469,6 +531,7 @@ void Week::update_scores()
             }
         }
         /////////// need to be check ///////////
+        
 
 
 
@@ -550,6 +613,23 @@ int Week::number_of_assist_total(string player_name )
             {
                 number_of_assist++;
             }
+        }
+    }
+    return number_of_assist;
+}
+
+void Week::set_all_players(vector<Player*> _players)
+{
+    this->All_playyers = _players;
+}
+
+void Week::print_goal_with_assist()
+{
+    for(auto x : goal_with_assist)
+    {
+        for(auto y : x)
+        {
+            cout << y.first << " " << y.second << endl;
         }
     }
 }
