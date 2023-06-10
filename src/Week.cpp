@@ -365,28 +365,28 @@ void Week::update_scores()
         //fist put players type 
 
 
-        // GoalkeeperPlayer *goalkeeper_player = dynamic_cast<GoalkeeperPlayer *>(find_player(players_of_team[i].first[1].first));
-        DefenderPlayer *defender_player1 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[2].first));
+        // GoalkeeperPlayer *goalkeeper_player = dynamic_cast<GoalkeeperPlayer *>(find_player(players_of_team[i].first[0].first));
+        DefenderPlayer *defender_player1 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[1].first));
         defender_player1->set_player_position(Defender_position::LEFT_CORNER);
-        DefenderPlayer *defender_player2 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[3].first));
+        DefenderPlayer *defender_player2 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[2].first));
         defender_player2->set_player_position(Defender_position::LEFT_MIDDLE);
-        DefenderPlayer *defender_player3 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[4].first));
+        DefenderPlayer *defender_player3 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[3].first));
         defender_player3->set_player_position(Defender_position::RIGHT_MIDDLE);
-        DefenderPlayer *defender_player4 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[5].first));
+        DefenderPlayer *defender_player4 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[4].first));
         defender_player4->set_player_position(Defender_position::RIGHT_CORNER);
 
-        MidfielderPlayer *midfielder_player1 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[6].first));
+        MidfielderPlayer *midfielder_player1 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[5].first));
         midfielder_player1->set_player_position(Midfielder_position::LEFT);
-        MidfielderPlayer *midfielder_player2 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[7].first));
+        MidfielderPlayer *midfielder_player2 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[6].first));
         midfielder_player2->set_player_position(Midfielder_position::CENTER);
-        MidfielderPlayer *midfielder_player3 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[8].first));
+        MidfielderPlayer *midfielder_player3 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[7].first));
         midfielder_player3->set_player_position(Midfielder_position::RIGHT);
 
-        ForwardPlayer *forward_player1 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[9].first));
+        ForwardPlayer *forward_player1 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[8].first));
         forward_player1->set_player_position(Forward_position::LEFT_WING);
-        ForwardPlayer *forward_player2 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[10].first));
+        ForwardPlayer *forward_player2 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[9].first));
         forward_player2->set_player_position(Forward_position::CENTER_FORWARD);
-        ForwardPlayer *forward_player3 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[11].first));
+        ForwardPlayer *forward_player3 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[10].first));
         forward_player3->set_player_position(Forward_position::RIGHT_WING);
 
 
@@ -660,17 +660,6 @@ void Week::update_scores()
             // }
             
         }
-        
-
-
-
-
-
-
-
-
-
-        
         
         
 
