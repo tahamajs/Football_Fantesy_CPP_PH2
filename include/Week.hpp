@@ -18,6 +18,9 @@
 
 using namespace std;
 
+const int TEAM_ONE = 0;
+const int TEAM_TWO = 1;
+
 class Week
 {
 public:
@@ -42,6 +45,7 @@ public:
     int number_of_goal_total(string player_name);
     int number_of_assist_total(string player_name);
     void set_all_players(vector<Player*> players);
+    bool is_player_goal(string player_name , int row_number);
 
 
 
@@ -50,11 +54,12 @@ public:
     void print_goal_with_assist();
 
 private:
+
     int week_number;
     vector<Match*> matches;
 
 
-
+    int get_player_local_team(string player_name);
 
 
     //need to be deleted

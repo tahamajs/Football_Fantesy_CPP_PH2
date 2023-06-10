@@ -17,10 +17,14 @@ public:
     void increase_clean_sheet(int _clean_sheet){ clean_sheet += _clean_sheet; }
     int get_clean_sheet(){ return clean_sheet; }
 
+    void set_player_position(enum Midfielder_position _position){ position = _position; }
+    enum Midfielder_position get_player_position(){ return position; }
+
 
 
 private:
     int goals = 0;
     int assists_goals = 0;
     int clean_sheet = 0;
+    enum Midfielder_position position ;
 };

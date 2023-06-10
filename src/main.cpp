@@ -14,7 +14,7 @@ int main()
     system.open_transfare_window();
     system.pass_week();
 
-    system.print_players();
+    // system.print_players();
 
 
 

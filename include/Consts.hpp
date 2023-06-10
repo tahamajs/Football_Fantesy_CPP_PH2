@@ -17,6 +17,32 @@ enum Teansfare_window_status
 };
 
 
+//players position in team
+
+enum Defender_position
+{
+    LEFT_CORNER,
+    RIGHT_CORNER,
+    LEFT_MIDDLE,
+    RIGHT_MIDDLE,
+};
+
+enum Midfielder_position
+{
+    LEFT,
+    RIGHT,
+    CENTER
+};
+
+enum Forward_position
+{
+    LEFT_WING,
+    RIGHT_WING,
+    CENTER_FORWARD
+};
+
+
+
 const string PREMIER_LEAGUE_FILE_PATH = "./data/premier_league.csv" ;
 const string WEEKS_FILE_PATH = "./data/weeks_stats/week_";
 

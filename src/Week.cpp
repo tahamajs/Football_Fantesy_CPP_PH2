@@ -362,6 +362,37 @@ void Week::update_scores()
     pair<vector<pair<string,double>>,vector<pair<string,double>>> players_of_team_temp;
     for (int i = 0; i < 10; i++)
     {
+        //fist put players type 
+
+
+        // GoalkeeperPlayer *goalkeeper_player = dynamic_cast<GoalkeeperPlayer *>(find_player(players_of_team[i].first[1].first));
+        DefenderPlayer *defender_player1 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[2].first));
+        defender_player1->set_player_position(Defender_position::LEFT_CORNER);
+        DefenderPlayer *defender_player2 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[3].first));
+        defender_player2->set_player_position(Defender_position::LEFT_MIDDLE);
+        DefenderPlayer *defender_player3 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[4].first));
+        defender_player3->set_player_position(Defender_position::RIGHT_MIDDLE);
+        DefenderPlayer *defender_player4 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[5].first));
+        defender_player4->set_player_position(Defender_position::RIGHT_CORNER);
+
+        MidfielderPlayer *midfielder_player1 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[6].first));
+        midfielder_player1->set_player_position(Midfielder_position::LEFT);
+        MidfielderPlayer *midfielder_player2 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[7].first));
+        midfielder_player2->set_player_position(Midfielder_position::CENTER);
+        MidfielderPlayer *midfielder_player3 = dynamic_cast<MidfielderPlayer *>(find_player(players_of_team[i].first[8].first));
+        midfielder_player3->set_player_position(Midfielder_position::RIGHT);
+
+        ForwardPlayer *forward_player1 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[9].first));
+        forward_player1->set_player_position(Forward_position::LEFT_WING);
+        ForwardPlayer *forward_player2 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[10].first));
+        forward_player2->set_player_position(Forward_position::CENTER_FORWARD);
+        ForwardPlayer *forward_player3 = dynamic_cast<ForwardPlayer *>(find_player(players_of_team[i].first[11].first));
+        forward_player3->set_player_position(Forward_position::RIGHT_WING);
+
+
+        
+
+
         //defult value of win or draw
         if(matches[i]->get_result1() > matches[i]->get_result2())
         {
@@ -546,6 +577,99 @@ void Week::update_scores()
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+        //check goal of each player
+        for(auto x : goal_with_assist[i])
+        {
+            vector<pair<string,double>>  *team1;
+            vector<pair<string,double>>  *team2;
+            if(get_player_local_team(x.first) == TEAM_ONE)
+            {
+                team1 = &players_of_team[i].first;
+                team2 = &players_of_team[i].second;
+            }
+            else
+            {
+                team1 = &players_of_team[i].second;
+                team2 = &players_of_team[i].first;
+            }
+                
+            if(find_player(x.first)->get_type() == DEFENDER )
+            {
+                DefenderPlayer *defender_player = dynamic_cast<DefenderPlayer *>(find_player(x.first));
+                Defender_position defender_position = defender_player->get_player_position();
+                if(defender_position == RIGHT_CORNER)
+                {
+                    team2->at(1).second -= 1;
+                }
+                if(defender_position == LEFT_CORNER)
+                {
+                    team2->at(4).second -= 1;
+
+                }
+                if(defender_position == LEFT_MIDDLE || defender_position == LEFT_MIDDLE)
+                {
+                    team2->at(2).second -= 1;
+                    team2->at(3).second -= 1;
+                }
+                
+            }
+            if(find_player(x.first)->get_type() == MIDFIELDER )
+            {
+                MidfielderPlayer *midfielder_player = dynamic_cast<MidfielderPlayer *>(find_player(x.first));
+                Midfielder_position midfielder_position = midfielder_player->get_player_position();
+                if(midfielder_position == LEFT || midfielder_position == RIGHT || midfielder_position == CENTER)
+                {
+                    team2->at(5).second -= 1;
+                    team2->at(6).second -= 1;
+                    team2->at(7).second -= 1;
+                }
+                
+            }
+            if(find_player(x.first)->get_type() == FORWARD )
+            {
+                ForwardPlayer *forward_player = dynamic_cast<ForwardPlayer *>(find_player(x.first));
+                Forward_position forward_position = forward_player->get_player_position();
+                if(forward_position == LEFT_WING)
+                {
+                    team2->at(1).second -= 1;
+                }
+                if(forward_position == CENTER_FORWARD)
+                {
+                    team2->at(4).second -= 1;
+                }
+                if(forward_position == RIGHT_WING)
+                {
+                    team2->at(2).second -= 1;
+                    team1->at(3).second -= 1;
+                }
+                
+            }
+            
+            // else
+            // {
+            //     for(auto y : players_of_team[i].second)
+            //     {
+            //         if(y.first == x.first)
+            //         {
+            //             y.second += DEFULT_SCORE_GOAL_IN_WEEK;
+            //         }
+            //     }
+            // }
+            
+        }
+        
+
+
+
+
+
+
+
+
+
         
         
         
@@ -553,24 +677,19 @@ void Week::update_scores()
         
     }
 
+    for(auto x : players_of_team)
+    {
+        for(auto y : x.first)
+        {
+            y.second = score_calculator(y.second);
+        }
+        for(auto y : x.second)
+        {
+            y.second = score_calculator(y.second);
+        }
+    }
     
 }
-
-
-// bool Week::is_OWN_GOAL(string player_name , int row_number)
-// {
-//     for(auto x : goal_with_assist)
-//     {
-//         for(auto y : x)
-//         {
-//             if(y.first == player_name && y.second == OWN_GOAL_STRING)
-//             {
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
 
 
 bool Week::is_OWN_GOAL(string player_name , int row_number)
@@ -632,4 +751,38 @@ void Week::print_goal_with_assist()
             cout << y.first << " " << y.second << endl;
         }
     }
+}
+
+bool Week::is_player_goal(string player_name , int row_number)
+{
+    for(auto x : goal_with_assist[row_number])
+    {
+        if(x.first == player_name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int Week::get_player_local_team(string player_name)
+{
+    for(auto x : players_of_team)
+    {
+        for(auto y : x.first)
+        {
+            if(y.first == player_name)
+            {
+                return TEAM_ONE;
+            }
+        }
+        for(auto y : x.second)
+        {
+            if(y.first == player_name)
+            {
+                return TEAM_TWO;
+            }
+        }
+    }
+    return 0;
 }
