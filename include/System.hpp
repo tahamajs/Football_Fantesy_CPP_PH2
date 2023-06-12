@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <fstream>
+#include <cmath>
 #include <regex>
 #include "Consts.hpp"
 #include "../include/User.hpp"

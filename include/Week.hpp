@@ -60,6 +60,7 @@ private:
 
 
     int get_player_local_team(string player_name);
+    void set_type_of_player_position(int i);
 
 
     //need to be deleted

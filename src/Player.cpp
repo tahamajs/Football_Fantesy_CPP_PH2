@@ -20,42 +20,24 @@ void Player::increase_count_of_yellow_card()
 
 bool Player::get_can_be_sold(int week_number)
 {
-    if(last_week_red_card != week_number-1 && count_of_yellow_card != MAX_COUNT_OF_YELLOW_CARD )
-    {
-        if ((week_number - last_week_injury) < 3 && (week_number - last_week_injury) > 0)
-        {
-            return false;
-        }
-        
-        return true;
-    }
-    else
+    if (last_week_red_card == week_number || count_of_yellow_card == MAX_COUNT_OF_YELLOW_CARD || ((week_number - last_week_injury) < 3 && (week_number - last_week_injury) >= 0))
     {
         return false;
     }
+    return true;
 }
 
 void Player::update_can_be_sold(int week_number)
 {
-    if(last_week_red_card != week_number-1 && count_of_yellow_card != MAX_COUNT_OF_YELLOW_CARD )
+    if (last_week_red_card == week_number || count_of_yellow_card == MAX_COUNT_OF_YELLOW_CARD || ((week_number - last_week_injury) < 3 && (week_number - last_week_injury) >= 0))
     {
-        if ((week_number - last_week_injury) < 3 && (week_number - last_week_injury) > 0)
-        {
-            can_be_sold = false;
-            score = 0;
-            return;
-        }
-        
-        can_be_sold = true;
-    }
-    else
-    {
-        // cout << (last_week_red_card != week_number-1) << (last_week_injury < week_number-3) << (count_of_yellow_card != MAX_COUNT_OF_YELLOW_CARD) << endl;
-        
         can_be_sold = false;
         score = 0;
+        return;
     }
+    can_be_sold = true;
 }
+
 
 string Player::get_player_role()
 {

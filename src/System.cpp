@@ -13,10 +13,10 @@ System::System()
     // cout << "init_main_teams" << endl;
     
 
-    // for(Player* _Player : players)
-    // {
-    //     cout << _Player->get_name() << " " << _Player->get_player_price() << "\n";
-    // }
+    for(Player* _Player : players)
+    {
+        cout << _Player->get_name() << " " << _Player->get_type()<< "\n";
+    }
 
     // for(Week* week : weeks)
     // {
@@ -252,6 +252,7 @@ void System::init_weeks()
         }
         weeks.push_back(new Week(i+1,goal_with_assist ,players_of_team ,match, yellow_card, red_card, injure));
         weeks[i]->set_all_players(players);
+        weeks[i]->update_type_players();
 
     }
 }
@@ -400,6 +401,7 @@ void System::cloes_transfare_window()
     if(!is_admin_login)
         throw Bad_request();
     admin->set_transfer_window_status(Teansfare_window_status::CLOSED);
+    transfare_state = CLOSED;
 }
 
 
@@ -407,7 +409,8 @@ void System::open_transfare_window()
 {
     if(!is_admin_login)
         throw Bad_request();
-    admin->set_transfer_window_status(Teansfare_window_status::CLOSED);
+    admin->set_transfer_window_status(Teansfare_window_status::OPEN);
+    transfare_state = OPEN;
 }
 
 void System::pass_week()
@@ -445,18 +448,15 @@ void System::sell_player(const string& player_name)
 void System::print_team_of_week(int _week_number)
 {
 
-    // if(!is_admin_login)
-    //     throw Bad_request();
-
-    if(_week_number == EMPTY_NUMBER)
-        _week_number = week_number +1;
-
-    if(_week_number < 1 || _week_number > 19)
+    if (_week_number == EMPTY_NUMBER)
         throw Bad_request();
-    
+
+    if (_week_number < 1 || _week_number > week_number)
+        throw Bad_request();
+
     vector< pair<Player*,double> > best_players = weeks[_week_number-1]->get_best_team_week();
     
-    cout << "team of the week:" << endl ;
+    // cout << "team of the week:" << endl ;
     cout << "GoalKeeper: " << best_players[0].first->get_name() << " | " << "score: " << best_players[0].second<< endl;
     cout << "Defender 1: " << best_players[1].first->get_name() << " | " << "score: " << best_players[1].second<< endl;
     cout << "Defender 2: " << best_players[2].first->get_name() << " | " << "score: " << best_players[2].second<< endl;
@@ -541,36 +541,48 @@ void System::print_matches_result_league(int _week_number)
     }
 }
 
-vector<User*> System::get_user_ranks()
+vector<User *> System::get_user_ranks()
 {
-    vector<User*> users = this->users;
-    sort(users.begin(), users.end(), [](User* user1, User* user2){
-        // return user1->get_fantasy_team()->get_score() > user2->get_fantasy_team()->get_score();
-        if (user1->get_fantasy_team()->get_score() == user2->get_fantasy_team()->get_score())
+    vector<User *> users = this->users;
+    sort(users.begin(), users.end(), [](User *user1, User *user2)
+         {
+             if (user1->get_fantasy_team()->get_score() == user2->get_fantasy_team()->get_score())
+             {
+                 return user1->get_user_name() < user2->get_user_name();
+             }
+             else
+             {
+                 return user1->get_fantasy_team()->get_score() > user2->get_fantasy_team()->get_score();
+             } });
+    for (auto user : users)
+    {
+        if (user->get_fantasy_team()->is_full() == false)
         {
-            return user1->get_user_name() < user2->get_user_name();
+            users.erase(find(users.begin(), users.end(), user));
         }
-        else
-        {
-            return user1->get_fantasy_team()->get_score() > user2->get_fantasy_team()->get_score();
-        }
-        
-    });
+    }
     return users;
 }
-
 void System::print_users_ranking()
 {
-    vector<User*> users = get_user_ranks();
-    for(int i = 0; i < users.size(); i++)
+    vector<User *> users = get_user_ranks();
+
+    if (users.size() == 0)
+        throw Empty();
+    if (week_number == 0)
+        throw Empty();
+
+    for (int i = 0; i < users.size(); i++)
     {
-        cout << i+1 << ". " << "team_name: " << users[i]->get_user_name() << " | " << users[i]->get_fantasy_team()->get_score() << endl;
+        cout << i + 1 << ". "
+             << "team_name: " << users[i]->get_user_name() << " | " << fixed << setprecision(1) << users[i]->get_fantasy_team()->get_score() << endl;
     }
 }
 
 void System::print_main_team_players(string _team_name ,string _type = "" , bool rank = false)
 {
     MainTeam* team = find_team(_team_name);
+    int i = 1;
     if(team == nullptr)
     {
         throw Not_Found();
@@ -582,15 +594,15 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         players = team->get_goalkeeper_players(rank);
         for(auto player : players)
         {
-            cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_GOALKEEPER_INSTRUCTION << " | " << "score: " ;
-            // printf("%.1f\n", player->get_average_score()) << pla;
-            printf("%.1f", player->get_average_score()); 
+            cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_GOALKEEPER_INSTRUCTION << " | " << "score: " ;
+            // printf("%.1f\n", floor(player->get_average_score()*10)/10) << pla;
+            printf("%.1f", floor(player->get_average_score()*10)/10); 
             // cout<<   player->get_score();
 
             //downcast to GoalkeeperPlayer
             GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
             cout << " | " << "clean sheets: " << goalkeeper_player->get_clean_sheet() << endl;
-
+            i++;
 
 
 
@@ -602,10 +614,11 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         players = team->get_defender_players(rank);
         for(auto player : players)
         {
-            cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_DEFENDER_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f", player->get_average_score());
-            // printf("%.1f", player->get_average_score());
+            cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_DEFENDER_INSTRUCTION << " | " << "score: " ;
+            printf("%.1f", floor(player->get_average_score()*10)/10);
+            // printf("%.1f", floor(player->get_average_score()*10)/10);
             // cout << " " << player->get_score() << endl;
+            i++;
 
             // downcast to DefenderPlayer
             DefenderPlayer* defender_player = dynamic_cast<DefenderPlayer*>(player);
@@ -617,8 +630,9 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         players = team->get_midfielder_players(rank);
         for(auto player : players)
         {
-            cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_MIDFIELDER_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f", player->get_average_score());
+            cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_MIDFIELDER_INSTRUCTION << " | " << "score: " ;
+            printf("%.1f", floor(player->get_average_score()*10)/10);
+            i++;
 
             // downcast to MidfielderPlayer
             MidfielderPlayer* midfielder_player = dynamic_cast<MidfielderPlayer*>(player);
@@ -631,8 +645,9 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         players = team->get_forward_players(rank);
         for(auto player : players)
         {
-            cout << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_FORWARD_INSTRUCTION << " | " << "score: " ;
-            printf("%.1f", player->get_average_score());
+            cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_FORWARD_INSTRUCTION << " | " << "score: " ;
+            printf("%.1f", floor(player->get_average_score()*10)/10);
+            i++;
 
             // downcast to ForwardPlayer
             ForwardPlayer* forward_player = dynamic_cast<ForwardPlayer*>(player);
@@ -646,9 +661,36 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         
         for(auto player : players)
         {
-            cout << "name: " << player->get_name() << " | " << "role:" << player->get_player_role() << " | " << "score: " ;
-            printf("%.1f\n", player->get_average_score());
+            cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << player->get_player_role() << " | " << "score: " ;
+            printf("%.1f", floor(player->get_average_score()*10)/10);
+            i++;
             // cout << player->get_score() << endl;
+
+            if(player->get_type() == GOALKEEPER)
+            {
+                //downcast to GoalkeeperPlayer
+                GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
+                cout << " | " << "clean sheets: " << goalkeeper_player->get_clean_sheet() << endl;
+            }
+            else if(player->get_type() == DEFENDER)
+            {
+                // downcast to DefenderPlayer
+                DefenderPlayer* defender_player = dynamic_cast<DefenderPlayer*>(player);
+                cout << " | " << "goals: " << defender_player->get_goals() << " | " << "assists: " << defender_player->get_assists_goals() << " | " << "clean sheets: " << defender_player->get_clean_sheet() << endl;
+            }
+            else if(player->get_type() == MIDFIELDER)
+            {
+                // downcast to MidfielderPlayer
+                MidfielderPlayer* midfielder_player = dynamic_cast<MidfielderPlayer*>(player);
+                cout << " | " << "goals: " << midfielder_player->get_goals() << " | " << "assists: " << midfielder_player->get_assists_goals() << " | " << "clean sheets: " << midfielder_player->get_clean_sheet() << endl;
+                // cout << " << midfielder_player->get_goals() << endl;
+            }
+            else if(player->get_type() == FORWARD)
+            {
+                // downcast to ForwardPlayer
+                ForwardPlayer* forward_player = dynamic_cast<ForwardPlayer*>(player);
+                cout << " | " << "goals: " << forward_player->get_goals() << " | " << "assists: " << forward_player->get_assists_goals() << endl;
+            }
         }
     }
 }
