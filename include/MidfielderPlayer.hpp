@@ -20,8 +20,8 @@ public:
     enum Midfielder_position get_player_position() { return position; }
 
 private:
-    int goals = 0;
-    int assists_goals = 0;
-    int clean_sheet = 0;
+    int goals = DEFULT_GOAL;
+    int assists_goals = DEFULT_GOAL;
+    int clean_sheet = DEFULT_GOAL;
     enum Midfielder_position position;
 };

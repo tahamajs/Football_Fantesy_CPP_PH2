@@ -55,6 +55,7 @@ string Player::get_player_role()
     {
         return SUMMERIES_FORWARD_INSTRUCTION;
     }
+    return EMPTY_STRING;
 }
 
 double Player::get_average_score()
@@ -69,4 +70,10 @@ double Player::get_average_score()
         sum += score;
     }
     return sum / double(scores_of_weeks.size());
+}
+
+void Player::increase_score(double score)
+{
+    scores_of_weeks.push_back(score);
+    count_of_week_played++;
 }

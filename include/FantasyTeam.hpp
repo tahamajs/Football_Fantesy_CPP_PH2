@@ -26,14 +26,14 @@ public:
 
 private:
     string team_name;
-    double score = 0;
+    double score = DEFULT_GOAL;
     Player *Forward_player;
     Player *Midfielder_player;
     Player *Defender_1_player;
     Player *Defender_2_player;
     Player *Goalkeeper_player;
     Player *Captain_player;
-    int number_of_player = 0;
+    int number_of_player = DEFULT_GOAL;
     bool is_full_yet = false;
 
     bool is_in_team(Player *player);

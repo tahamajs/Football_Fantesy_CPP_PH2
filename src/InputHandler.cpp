@@ -256,7 +256,7 @@ void InputHandler::pass_week()
 void InputHandler::buy_player()
 {
 
-    int count = count_of_input_word();
+    // int count = count_of_input_word();
     string input;
     string player_name;
 

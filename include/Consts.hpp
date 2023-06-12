@@ -67,7 +67,9 @@ const int EMPTY_NUMBER = -1;
 const string EMPTY_STRING = "";
 
 const string DEFULT_ADMIN_USERNAME = "admin";
+const string ERROR_FILE = "ERROR FILE TYPES OF PLAYERS";
 
+const int DEFULT_GOAL = 0;
 const int DEFULT_FANTASY_TEAM_PRICE = 2500;
 const int DEFULT_PLAYER_PRICE = 0;
 const int DEFULT_WIN_SCORE_WEEK = 5;

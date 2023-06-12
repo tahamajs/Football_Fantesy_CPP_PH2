@@ -16,5 +16,5 @@ public:
     void increase_assists_goals(int _assists_goals) {}
 
 private:
-    int clean_sheet = 0;
+    int clean_sheet = DEFULT_GOAL;
 };

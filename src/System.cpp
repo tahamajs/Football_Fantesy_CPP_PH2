@@ -1,5 +1,48 @@
 #include "../include/System.hpp"
 
+
+
+bool cmp_team(MainTeam* team1, MainTeam* team2){
+    // return team1->get_score() > team2->get_score;
+    if(team1->get_score() > team2->get_score())
+        return true;
+    else if(team1->get_score() == team2->get_score())
+    {
+        if(team1->get_goal_difference() > team2->get_goal_difference())
+            return true;
+        else if(team1->get_goal_difference() == team2->get_goal_difference())
+        {
+            if(team1->get_goal_for() > team2->get_goal_for())
+                return true;
+            else if(team1->get_goal_for() == team2->get_goal_for())
+            {
+                if(team1->get_team_name() < team2->get_team_name())
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
+
+bool cmp_users(User *user1, User *user2)
+{
+    if (user1->get_fantasy_team()->get_score() == user2->get_fantasy_team()->get_score())
+    {
+        return user1->get_user_name() < user2->get_user_name();
+    }
+    else
+    {
+        return user1->get_fantasy_team()->get_score() > user2->get_fantasy_team()->get_score();
+    } 
+}
+
 System::System()
 {
     this->admin = new Admin(&transfare_state);
@@ -352,9 +395,7 @@ void System::login_admin(const string& _password)
 void System::update_week()
 {
     for(auto player : players)
-    {
         player->set_score(0);
-    }
     
     weeks[week_number-1]->update_players();
 
@@ -414,7 +455,7 @@ void System::sell_player(const string& player_name)
     if(current_user == nullptr)
         throw Bad_request();
     Player* player = find_player(player_name);
-    if(plauyer == nullptr)
+    if(player == nullptr)
         throw Not_Found();
     current_user->get_fantasy_team()->sell_player(player_name,transfare_state, week_number);
 }
@@ -472,11 +513,6 @@ void System::print_fantasy_team(string team_name = "")
         throw Empty();
     vector<Player*> players = fantasy_team->get_fantasy_team_players();
     cout << "Fantasy Team: " << team_name << endl;
-    // cout << "GoalKeeper: " << players[0]->get_name() << endl;
-    // cout << "Defender 1: " << players[1]->get_name() << endl;
-    // cout << "Defender 2: " << players[2]->get_name() << endl;
-    // cout << "Midfielder: " << players[3]->get_name() << endl;
-    // cout << "Striker: " << players[4]->get_name() << endl;
 
 
     /////////////////////////////////// need to be deleted /////////////////////////////////////////
@@ -524,16 +560,7 @@ void System::print_matches_result_league(int _week_number)
 vector<User *> System::get_user_ranks()
 {
     vector<User *> users = this->users;
-    sort(users.begin(), users.end(), [](User *user1, User *user2)
-         {
-             if (user1->get_fantasy_team()->get_score() == user2->get_fantasy_team()->get_score())
-             {
-                 return user1->get_user_name() < user2->get_user_name();
-             }
-             else
-             {
-                 return user1->get_fantasy_team()->get_score() > user2->get_fantasy_team()->get_score();
-             } });
+    sort(users.begin(), users.end(), cmp_users);
     for (auto user : users)
     {
         if (user->get_fantasy_team()->is_full() == false)
@@ -678,34 +705,7 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
 void System::print_league_standings()
 {
     vector<MainTeam*> teams = this->main_teams;
-    sort(teams.begin(), teams.end(), [](MainTeam* team1, MainTeam* team2){
-        // return team1->get_score() > team2->get_score;
-        if(team1->get_score() > team2->get_score())
-            return true;
-        else if(team1->get_score() == team2->get_score())
-        {
-            if(team1->get_goal_difference() > team2->get_goal_difference())
-                return true;
-            else if(team1->get_goal_difference() == team2->get_goal_difference())
-            {
-                if(team1->get_goal_for() > team2->get_goal_for())
-                    return true;
-                else if(team1->get_goal_for() == team2->get_goal_for())
-                {
-                    if(team1->get_team_name() < team2->get_team_name())
-                        return true;
-                    else
-                        return false;
-                }
-                else
-                    return false;
-            }
-            else
-                return false;
-        }
-        else
-            return false;
-    });
+    sort(teams.begin(), teams.end(), cmp_team );
     for(int i = 0; i < teams.size(); i++)
     {
         cout << i+1 << ". " << teams[i]->get_team_name() << ": " << "score: " << teams[i]->get_score() << " | " << "GF: " << teams[i]->get_goal_for() << " | " << "GA: " << teams[i]->get_goal_against() << endl;

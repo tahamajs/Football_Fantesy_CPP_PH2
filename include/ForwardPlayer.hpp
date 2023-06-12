@@ -18,7 +18,7 @@ public:
     enum Forward_position get_player_position() { return position; }
 
 private:
-    int goals = 0;
-    int assists_goals = 0;
+    int goals = DEFULT_GOAL;
+    int assists_goals = DEFULT_GOAL;
     enum Forward_position position;
 };

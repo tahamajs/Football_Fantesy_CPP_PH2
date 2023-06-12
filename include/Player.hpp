@@ -26,11 +26,7 @@ public:
     void increase_count_of_yellow_card();
     void update_can_be_sold(int week_number);
     string get_player_role();
-    void increase_score(double score)
-    {
-        scores_of_weeks.push_back(score);
-        count_of_week_played++;
-    }
+    void increase_score(double score);
     double get_average_score();
     int get_player_price() { return player_price; }
     void set_player_price(int _player_price) { player_price = _player_price; }
@@ -41,7 +37,7 @@ public:
 
 private:
     string name;
-    double score = 0;
+    double score = DEFULT_PLAYER_PRICE;
     int player_price = DEFULT_PLAYER_PRICE;
     enum Player_type type;
     bool can_be_sold = true;
