@@ -24,36 +24,6 @@ void Week::add_match(MainTeam* team1, MainTeam* team2 , int result1 , int result
     this->matches.push_back(match);
 }
 
-// void Week::print_week()
-// {
-//     cout << endl << "Week " << this->week_number << ":" << endl;
-//     for(auto match : this->matches)
-//     {
-//         cout << match->get_team1()->get_team_name() << " " << match->get_result1() << " - " << match->get_result2() << " " << match->get_team2()->get_team_name() << endl;
-//     }
-//     cout << "Scores:" << endl;
-//     cout << "size of scores: " << this->scores.size() << endl;
-//     for(auto score : this->scores)
-//     {
-//         cout << score.first->getName() << " " << score.second << endl;
-//     }
-//     cout << "Red cards:" << endl;
-//     for(auto red_card : this->Red_cards)
-//     {
-//         cout << red_card << endl;
-//     }
-//     cout << "Yellow cards:" << endl;
-//     for(auto yellow_card : this->Yellow_cards)
-//     {
-//         cout << yellow_card << endl;
-//     }
-//     cout << "Injured players:" << endl;
-//     for(auto injured_player : this->injured_players)
-//     {
-//         cout << injured_player << endl;
-//     }
-// }
-
 Player* Week::find_player(string player_name)
 {
     for(auto player : this->All_playyers)
@@ -238,7 +208,6 @@ void Week::update_type_players()
             // cout << player1.first << endl;
             if(find_player(player1.first) != nullptr)
             {
-                // cout << "llllllllllllll";
                 
                 Player* player2 = find_player(player1.first);
                 if(player2->get_type() == DEFENDER)
@@ -534,18 +503,27 @@ void Week::update_scores()
         // for(auto x : players_of_team)
         for (size_t k = 0; k < players_of_team.size(); k++)
         {
-            for(auto y : players_of_team[k].first)
+            // for(auto y : players_of_team[k].first)
+            // {
+            for (int x = 0; x < players_of_team[k].first.size() ; x++)
             {
-                if(is_OWN_GOAL(y.first,i))
+                if(is_OWN_GOAL(players_of_team[k].first[x].first,i))
                 {
-                    y.second += DEFULT_OWN_GOAL_SCORE;
+                    players_of_team[k].first[x].second += DEFULT_OWN_GOAL_SCORE;
                 }
             }
-            for(auto y : players_of_team[k].second)
+            // for(auto y : players_of_team[k].second)
+            // {
+            //     if(is_OWN_GOAL(y.first,i))
+            //     {
+            //         y.second += DEFULT_OWN_GOAL_SCORE;
+            //     }
+            // }
+            for (int x = 0; x < players_of_team[k].second.size() ; x++)
             {
-                if(is_OWN_GOAL(y.first,i))
+                if(is_OWN_GOAL(players_of_team[k].second[x].first,i))
                 {
-                    y.second += DEFULT_OWN_GOAL_SCORE;
+                    players_of_team[k].second[x].second += DEFULT_OWN_GOAL_SCORE;
                 }
             }
         }
@@ -660,13 +638,14 @@ void Week::update_scores()
     //     }
     // }
 
-    // for(auto x : players_of_team)
-    // {
-    //     for(auto y : x.first)
-    //     {
-    //         cout << "xxxxxxnnxxxx" << y.first << " " << y.second << endl;
-    //     }
-    // }
+    for(auto x : players_of_team)
+    {
+        for(auto y : x.first)
+        {
+            cout << "xxxxxxnnxxxx " << y.first << " " << y.second << endl;
+        }
+    }
+
     for (int i = 0; i < players_of_team.size(); i++)
     {
         for(int j = 0 ; j < players_of_team[i].first.size() ; j++)
@@ -679,6 +658,10 @@ void Week::update_scores()
         }
     }
     
+
+
+    //////////////////////////////// 
+    update_type_players();
 
     
     
@@ -783,8 +766,6 @@ int Week::get_player_local_team(string player_name)
 
 void Week::set_type_of_player_position(int i)
 {
-    cout << i << endl;
-    
     GoalkeeperPlayer *goalkeeper_player = dynamic_cast<GoalkeeperPlayer *>(find_player(players_of_team[i].first[0].first));
     DefenderPlayer *defender_player1 = dynamic_cast<DefenderPlayer *>(find_player(players_of_team[i].first[1].first));
     if(defender_player1 == NULL)

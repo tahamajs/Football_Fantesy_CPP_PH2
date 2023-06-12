@@ -7,23 +7,6 @@ System::System()
     init_main_teams();
     init_weeks();
 
-    
-
-
-    // cout << "init_main_teams" << endl;
-    
-
-    for(Player* _Player : players)
-    {
-        cout << _Player->get_name() << " " << _Player->get_type()<< "\n";
-    }
-
-    // for(Week* week : weeks)
-    // {
-    //     week->print_week();
-    // }
-    // weeks[0]->print_week();
-    // weeks[0]->print_goal_with_assist();
 
 }
 
@@ -164,13 +147,7 @@ void System::init_main_teams()
 }
 
 
-//need to be completed
-//
-//
-//
-//
-//
-//need to be completed ---------------------------------------
+
 void System::init_weeks()
 {
     for (int i = 0; i < 19; i++)
@@ -189,9 +166,6 @@ void System::init_weeks()
         // vector<pair<Player*,double>> scores ;
         vector< pair< vector<pair<string,double>> , vector<pair<string,double>> > > players_of_team ;
         vector<vector<pair<string ,string>>> goal_with_assist ;
-
-        // vector<pair<string,double>> team1;
-        // vector<pair<string,double>> team2;
 
         vector<string> yellow_card;
         vector<string> red_card;
@@ -297,6 +271,8 @@ void System::signup(const string& user_name, const string& password)
     FantasyTeam* new_fantasy_team = new FantasyTeam(user_name);
     fantasy_teams.push_back(new_fantasy_team);
     
+    // cout << new_fantasy_team->get_name();
+
     User* new_user = new User(user_name, password , new_fantasy_team);
     this->users.push_back(new_user);
     current_user = new_user;
@@ -328,12 +304,10 @@ bool System::is_user_exist(string user_name)
 
 void System::login(const string& user_name, const string& password)
 {
-    // ??????????????
     if(this->current_user != nullptr || is_admin_login)
     {
         throw Bad_request();
     }
-    // ??????????????
 
     User* user = find_user(user_name);
     if(user == nullptr)
@@ -388,8 +362,10 @@ void System::update_week()
     {
         player->update_can_be_sold(week_number);
     }
+    // cout << fantasy_teams.size() << endl;
     for(auto FantasyTeam : fantasy_teams)
     {
+        // cout << ",,,,,,,,,,,,,,";
         FantasyTeam->update_score();
     }
 
@@ -429,8 +405,6 @@ void System::buy_player(const string& player_name)
         throw Bad_request();
     Player* player = find_player(player_name);
     if(player == nullptr)
-        // cout << "jjj" << endl;
-        // cout << ",,,," << endl;
         throw Not_Found();
     current_user->get_fantasy_team()->add_player(player,transfare_state, week_number);
 }
@@ -439,9 +413,9 @@ void System::sell_player(const string& player_name)
 {
     if(current_user == nullptr)
         throw Bad_request();
-    // Player* player = find_player(player_name);
-    // if(player == nullptr)
-    //     throw Not_Found();
+    Player* player = find_player(player_name);
+    if(plauyer == nullptr)
+        throw Not_Found();
     current_user->get_fantasy_team()->sell_player(player_name,transfare_state, week_number);
 }
 
@@ -457,11 +431,16 @@ void System::print_team_of_week(int _week_number)
     vector< pair<Player*,double> > best_players = weeks[_week_number-1]->get_best_team_week();
     
     // cout << "team of the week:" << endl ;
-    cout << "GoalKeeper: " << best_players[0].first->get_name() << " | " << "score: " << best_players[0].second<< endl;
-    cout << "Defender 1: " << best_players[1].first->get_name() << " | " << "score: " << best_players[1].second<< endl;
-    cout << "Defender 2: " << best_players[2].first->get_name() << " | " << "score: " << best_players[2].second<< endl;
-    cout << "Midfielder: " << best_players[3].first->get_name() << " | " << "score: " << best_players[3].second<< endl;
-    cout << "Forward: " << best_players[4].first->get_name() << " | " << "score: " << best_players[4].second<< endl;
+    cout << "GoalKeeper: " << best_players[0].first->get_name() << " | " << "score: " ;
+    printf("%.1f\n", floor(best_players[0].second*10)/10);
+    cout << "Defender 1: " << best_players[1].first->get_name() << " | " << "score: " ;
+    printf("%.1f\n", floor(best_players[1].second*10)/10);
+    cout << "Defender 2: " << best_players[2].first->get_name() << " | " << "score: " ;
+    printf("%.1f\n", floor(best_players[2].second*10)/10);
+    cout << "Midfielder: " << best_players[3].first->get_name() << " | " << "score: " ;
+    printf("%.1f\n", floor(best_players[3].second*10)/10);
+    cout << "Forward: " << best_players[4].first->get_name() << " | " << "score: " ;
+    printf("%.1f\n", floor(best_players[4].second*10)/10);
 }
 
 FantasyTeam* System::find_fantasy_team(string team_name)
@@ -528,7 +507,8 @@ void System::print_fantasy_team(string team_name = "")
 
     /////////////////////////////////// need to be deleted /////////////////////////////////////////
 
-    cout << "Total Points: " << fantasy_team->get_score() << endl;
+    cout << "Total Points: " ;
+    printf("%.1f\n", floor(fantasy_team->get_score()*10)/10);
     cout << "Team Cost: " << get_total_cost_of_fantasy_team(fantasy_team) << endl;
 }
 
@@ -595,11 +575,8 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         for(auto player : players)
         {
             cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_GOALKEEPER_INSTRUCTION << " | " << "score: " ;
-            // printf("%.1f\n", floor(player->get_average_score()*10)/10) << pla;
             printf("%.1f", floor(player->get_average_score()*10)/10); 
-            // cout<<   player->get_score();
-
-            //downcast to GoalkeeperPlayer
+            cout << " | " << "cost: " << player->get_player_price();
             GoalkeeperPlayer* goalkeeper_player = dynamic_cast<GoalkeeperPlayer*>(player);
             cout << " | " << "clean sheets: " << goalkeeper_player->get_clean_sheet() << endl;
             i++;
@@ -616,11 +593,9 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         {
             cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_DEFENDER_INSTRUCTION << " | " << "score: " ;
             printf("%.1f", floor(player->get_average_score()*10)/10);
-            // printf("%.1f", floor(player->get_average_score()*10)/10);
-            // cout << " " << player->get_score() << endl;
+            cout << " | " << "cost: " << player->get_player_price();
             i++;
 
-            // downcast to DefenderPlayer
             DefenderPlayer* defender_player = dynamic_cast<DefenderPlayer*>(player);
             cout << " | " << "goals: " << defender_player->get_goals() << " | " << "assists: " << defender_player->get_assists_goals() << " | " << "clean sheets: " << defender_player->get_clean_sheet() << endl;
         }
@@ -632,9 +607,10 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         {
             cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_MIDFIELDER_INSTRUCTION << " | " << "score: " ;
             printf("%.1f", floor(player->get_average_score()*10)/10);
+            cout << " | " << "cost: " << player->get_player_price();
+
             i++;
 
-            // downcast to MidfielderPlayer
             MidfielderPlayer* midfielder_player = dynamic_cast<MidfielderPlayer*>(player);
             cout << " | " << "goals: " << midfielder_player->get_goals() << " | " << "assists: " << midfielder_player->get_assists_goals() << " | " << "clean sheets: " << midfielder_player->get_clean_sheet() << endl;
 
@@ -647,6 +623,8 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         {
             cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << SUMMERIES_FORWARD_INSTRUCTION << " | " << "score: " ;
             printf("%.1f", floor(player->get_average_score()*10)/10);
+            cout << " | " << "cost: " << player->get_player_price();
+
             i++;
 
             // downcast to ForwardPlayer
@@ -663,6 +641,8 @@ void System::print_main_team_players(string _team_name ,string _type = "" , bool
         {
             cout << i << ". " << "name: " << player->get_name() << " | " << "role:" << player->get_player_role() << " | " << "score: " ;
             printf("%.1f", floor(player->get_average_score()*10)/10);
+            cout << " | " << "cost: " << player->get_player_price();
+
             i++;
             // cout << player->get_score() << endl;
 

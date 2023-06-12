@@ -10,7 +10,6 @@ using namespace std;
 
 const string Main_Password = "123456";
 
-
 class Admin
 {
 public:
@@ -18,7 +17,7 @@ public:
     bool check_password(string _password);
     void set_password(string _password);
     void set_transfer_window_status(enum Teansfare_window_status _transfer_window_status);
-    
+
 private:
     string password = Main_Password;
     enum Teansfare_window_status *transfer_window_status;

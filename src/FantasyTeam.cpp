@@ -148,7 +148,6 @@ void FantasyTeam::sell_player(string player_name, Teansfare_window_status tws, i
 
 void FantasyTeam::update_score()
 {
-
     if(number_of_player != 5)
     {
         return;
@@ -180,6 +179,10 @@ void FantasyTeam::update_score()
     if (Goalkeeper_player != NULL)
     {
         score += Goalkeeper_player->get_score();
+    }
+    if(Captain_player != NULL)
+    {
+        score += Captain_player->get_score();
     }
 }
 

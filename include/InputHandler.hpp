@@ -49,7 +49,6 @@ public:
     void run();
 
 private:
-
     System *system;
     stringstream command_line;
 
@@ -77,40 +76,36 @@ private:
     bool has_empty_field(const vector<string> &inputs, const vector<string> &needed_inputs);
     void print_successfull_massage();
     int count_of_input_word();
-    void replaceUnderscoresWithSpaces(std::string& str);
+    void replaceUnderscoresWithSpaces(std::string &str);
     void set_captan();
-
 
     const vector<string> signup_field = {USERNAME, PASSWORD};
     const vector<string> login_field = {USERNAME, PASSWORD};
     const vector<string> show_players_fiels = {TEAM_NAME};
     const vector<string> sell_player_fiels = {NAME};
     const vector<string> buy_player_fiels = {NAME};
-    
 
     typedef void (InputHandler::*call_func_ptr)();
     const unordered_map<string, call_func_ptr> POST_commands =
-    {
-        {SIGNUP, &InputHandler::signup},
-        {LOGIN, &InputHandler::login},
-        {LOGOUT, &InputHandler::logout},
-        {SELL_PLAYER, &InputHandler::sell_player},
-        {BUY_PLAYER, &InputHandler::buy_player},
-        {CLOSE_TRANSFARE_WINDOW, &InputHandler::close_transfer_window},
-        {OPEN_TRANSFARE_WINDOW, &InputHandler::open_transfer_window},
-        {PASS_WEEK, &InputHandler::pass_week},
-        {LOGIN_ADMIN, &InputHandler::login_admin},
-        {SET_CAPTAIN, &InputHandler::set_captan}
-    };
+        {
+            {SIGNUP, &InputHandler::signup},
+            {LOGIN, &InputHandler::login},
+            {LOGOUT, &InputHandler::logout},
+            {SELL_PLAYER, &InputHandler::sell_player},
+            {BUY_PLAYER, &InputHandler::buy_player},
+            {CLOSE_TRANSFARE_WINDOW, &InputHandler::close_transfer_window},
+            {OPEN_TRANSFARE_WINDOW, &InputHandler::open_transfer_window},
+            {PASS_WEEK, &InputHandler::pass_week},
+            {LOGIN_ADMIN, &InputHandler::login_admin},
+            {SET_CAPTAIN, &InputHandler::set_captan}};
 
     const unordered_map<string, call_func_ptr> GET_commands =
-    {
-        {TEAM_OF_THE_WEEK, &InputHandler::print_team_of_the_week},
-        {PLAYERS, &InputHandler::show_players},
-        {LEAGUE_STANDING, &InputHandler::show_league_standings},
-        {USER_RANKING, &InputHandler::show_users_ranking},
-        {SHOW_MATCH_RESULT, &InputHandler::show_match_result},
-        {SHOW_FANTASY_TEAM, &InputHandler::show_fantasy_team},
-        {SHOW_BUDGET, &InputHandler::show_budget}
-    };
+        {
+            {TEAM_OF_THE_WEEK, &InputHandler::print_team_of_the_week},
+            {PLAYERS, &InputHandler::show_players},
+            {LEAGUE_STANDING, &InputHandler::show_league_standings},
+            {USER_RANKING, &InputHandler::show_users_ranking},
+            {SHOW_MATCH_RESULT, &InputHandler::show_match_result},
+            {SHOW_FANTASY_TEAM, &InputHandler::show_fantasy_team},
+            {SHOW_BUDGET, &InputHandler::show_budget}};
 };

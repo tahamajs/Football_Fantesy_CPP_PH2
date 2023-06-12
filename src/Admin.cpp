@@ -19,4 +19,3 @@ void Admin::set_transfer_window_status(enum Teansfare_window_status _transfer_wi
 {
     *(this->transfer_window_status) = _transfer_window_status;
 }
-

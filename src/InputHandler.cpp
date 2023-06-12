@@ -6,9 +6,12 @@ InputHandler::InputHandler()
     system = new System();
 }
 
-void InputHandler::replaceUnderscoresWithSpaces(std::string& str) {
-    for (auto& c : str) {
-        if (c == '_') {
+void InputHandler::replaceUnderscoresWithSpaces(std::string &str)
+{
+    for (auto &c : str)
+    {
+        if (c == '_')
+        {
             c = ' ';
         }
     }
@@ -154,9 +157,9 @@ void InputHandler::signup()
 
     // cout << count << endl;
 
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
-    
+
     if (count != 7)
         throw Bad_request();
     command_line >> input;
@@ -167,7 +170,7 @@ void InputHandler::signup()
     if (input != PASSWORD)
         throw Bad_request();
     command_line >> password;
-    
+
     //////////////////////////////////////////////  delete this part ///////////////////////////////////////////////////
     if (username == "" || password == "")
         throw Bad_request();
@@ -184,22 +187,17 @@ void InputHandler::login()
 
     int count = count_of_input_word();
 
-
-
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
 
-    
-    if(count != 7)
+    if (count != 7)
         throw Bad_request();
     command_line >> input;
     if (input != TEAM_NAME)
         throw Bad_request();
-    
+
     command_line >> username;
     command_line >> input;
-
-    
 
     if (input != PASSWORD)
         throw Bad_request();
@@ -223,33 +221,33 @@ void InputHandler::logout()
 void InputHandler::print_team_of_the_week()
 {
     string input;
-    int _week_number ;
+    int _week_number;
 
     if (!cmnd_dlmtr_check())
         throw Bad_request();
-    
+
     int count = count_of_input_word();
 
-    if(count == 3)
+    if (count == 3)
         system->print_team_of_week(EMPTY_NUMBER);
-    else if(count == 5)
+    else if (count == 5)
     {
         command_line >> input;
-        if(input != WEEK_NUM)
+        if (input != WEEK_NUM)
             throw Bad_request();
         command_line >> _week_number;
         system->print_team_of_week(_week_number);
     }
     else
         throw Bad_request();
-    
+
     print_successfull_massage();
 }
 
 void InputHandler::pass_week()
 {
     int count = count_of_input_word();
-    if(count != 2)
+    if (count != 2)
         throw Bad_request();
     system->pass_week();
     print_successfull_massage();
@@ -266,16 +264,15 @@ void InputHandler::buy_player()
     {
         throw Bad_request();
     }
-    
+
     command_line >> input;
-    if(input != NAME)
+    if (input != NAME)
         throw Bad_request();
     command_line >> std::ws;
     getline(command_line, player_name);
     system->buy_player(player_name);
 
     print_successfull_massage();
-    
 }
 
 void InputHandler::sell_player()
@@ -283,17 +280,16 @@ void InputHandler::sell_player()
     string input;
     string player_name;
 
-    if(!cmnd_dlmtr_check())
-        throw Bad_request();    
+    if (!cmnd_dlmtr_check())
+        throw Bad_request();
 
     command_line >> input;
-    if(input != NAME)
+    if (input != NAME)
         throw Bad_request();
-    
+
     command_line >> std::ws;
     getline(command_line, player_name);
     system->sell_player(player_name);
-
 
     print_successfull_massage();
 }
@@ -305,7 +301,7 @@ void InputHandler::login_admin()
     string username;
     string password;
 
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
 
     if (count != 7)
@@ -323,14 +319,12 @@ void InputHandler::login_admin()
             throw Bad_request();
         command_line >> password;
 
-        
-        if(username != DEFULT_ADMIN_USERNAME)
+        if (username != DEFULT_ADMIN_USERNAME)
             throw Bad_request();
-        
-        system->login_admin(password);  
+
+        system->login_admin(password);
         print_successfull_massage();
     }
-    
 }
 
 void InputHandler::show_league_standings()
@@ -346,7 +340,7 @@ void InputHandler::show_users_ranking()
 void InputHandler::close_transfer_window()
 {
     int count = count_of_input_word();
-    if(count != 2)
+    if (count != 2)
         throw Bad_request();
     system->cloes_transfare_window();
     print_successfull_massage();
@@ -358,15 +352,15 @@ void InputHandler::show_fantasy_team()
     string input;
     string team_name;
 
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
 
-    if(count == 3)
+    if (count == 3)
         system->print_fantasy_team(EMPTY_STRING);
-    else if(count == 5)
+    else if (count == 5)
     {
         command_line >> input;
-        if(input != FANTASY_TEAM)
+        if (input != FANTASY_TEAM)
             throw Bad_request();
         command_line >> team_name;
         system->print_fantasy_team(team_name);
@@ -380,7 +374,7 @@ void InputHandler::show_fantasy_team()
 void InputHandler::open_transfer_window()
 {
     int count = count_of_input_word();
-    if(count != 2)
+    if (count != 2)
         throw Bad_request();
     system->open_transfare_window();
     print_successfull_massage();
@@ -392,13 +386,13 @@ void InputHandler::show_match_result()
     string input;
     int week_number;
 
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
-    
-    if(count == 5)
+
+    if (count == 5)
     {
         command_line >> input;
-        if(input != WEEK_NUM)
+        if (input != WEEK_NUM)
             throw Bad_request();
         command_line >> week_number;
         system->print_matches_result_league(week_number);
@@ -413,64 +407,63 @@ void InputHandler::show_players()
     string input;
     string team_name;
     string role;
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
 
-    if(count == 5)
+    if (count == 5)
     {
         command_line >> input;
-        if(input != TEAM_NAME)
+        if (input != TEAM_NAME)
             throw Bad_request();
         command_line >> team_name;
         replaceUnderscoresWithSpaces(team_name);
-        system->print_main_team_players(team_name, EMPTY_STRING,false);
+        system->print_main_team_players(team_name, EMPTY_STRING, false);
         print_successfull_massage();
     }
-    else if(count == 6)
+    else if (count == 6)
     {
         command_line >> input;
-        if(input != TEAM_NAME)
+        if (input != TEAM_NAME)
             throw Bad_request();
         command_line >> team_name;
         replaceUnderscoresWithSpaces(team_name);
         cout << team_name << endl;
         command_line >> input;
-        if(input == RANK_INSTRUCTION)
+        if (input == RANK_INSTRUCTION)
         {
-            system->print_main_team_players(team_name, EMPTY_STRING,true);
+            system->print_main_team_players(team_name, EMPTY_STRING, true);
         }
         else
         {
             auto it = find(SUMMERIES_INSTRUCTIONS.begin(), SUMMERIES_INSTRUCTIONS.end(), input);
-            if(it == SUMMERIES_INSTRUCTIONS.end())
+            if (it == SUMMERIES_INSTRUCTIONS.end())
                 throw Bad_request();
             role = input;
-            system->print_main_team_players(team_name, role,false);
+            system->print_main_team_players(team_name, role, false);
         }
     }
-    else if(count == 7)
+    else if (count == 7)
     {
         command_line >> input;
-        if(input != TEAM_NAME)
+        if (input != TEAM_NAME)
             throw Bad_request();
         command_line >> team_name;
         replaceUnderscoresWithSpaces(team_name);
         command_line >> input;
 
         auto it = find(SUMMERIES_INSTRUCTIONS.begin(), SUMMERIES_INSTRUCTIONS.end(), input);
-        if(it == SUMMERIES_INSTRUCTIONS.end())
+        if (it == SUMMERIES_INSTRUCTIONS.end())
             throw Bad_request();
         role = input;
         command_line >> input;
-        if(input != RANK_INSTRUCTION)
+        if (input != RANK_INSTRUCTION)
             throw Bad_request();
-        
-        system->print_main_team_players(team_name, role,true);
+
+        system->print_main_team_players(team_name, role, true);
     }
     else
         throw Bad_request();
 }
-
 
 ////////////////////////////////////  need to be check  /////////////////////////////////////////////
 void InputHandler::set_captan()
@@ -478,13 +471,13 @@ void InputHandler::set_captan()
     string input;
     string player_name;
 
-    if(!cmnd_dlmtr_check())
+    if (!cmnd_dlmtr_check())
         throw Bad_request();
 
     command_line >> input;
-    if(input != NAME)
+    if (input != NAME)
         throw Bad_request();
-    
+
     command_line >> std::ws;
     getline(command_line, player_name);
     system->set_capitan(player_name);
@@ -494,5 +487,5 @@ void InputHandler::set_captan()
 void InputHandler::show_budget()
 {
     system->show_budget();
-    print_successfull_massage();
+    // print_successfull_massage();
 }
