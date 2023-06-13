@@ -55,14 +55,11 @@ const vector<string> SUMMERIES_INSTRUCTIONS = {SUMMERIES_GOALKEEPER_INSTRUCTION,
 const string RANK_INSTRUCTION = "ranks";
 
 const int DEFULT_WEEK_NUMBER = 0;
-
 const int MAX_SELL_IN_WEEK = 2;
 const int MAX_BUY_IN_WEEK = 1;
-
 const int WIN_SCORE = 3;
 const int DRAW_SCORE = 1;
 const int LOSE_SCORE = 0;
-
 const int EMPTY_NUMBER = -1;
 const string EMPTY_STRING = "";
 

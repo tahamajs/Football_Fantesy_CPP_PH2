@@ -18,12 +18,6 @@ Week::Week(int week_number, vector<vector<pair<string, string>>> _goal_with_assi
     this->Red_cards = Red_cards;
     this->Yellow_cards = Yellow_cards;
     this->injured_players = injured_players;
-    // update_type_players();
-
-    // for(auto x : defenders_players)
-    // {
-    //     cout << x.first << endl;
-    // }
 }
 
 void Week::add_match(MainTeam *team1, MainTeam *team2, int result1, int result2)
@@ -47,15 +41,7 @@ Player *Week::find_player(string player_name)
 void Week::update_players()
 {
     update_scores();
-    // for(auto score : this->scores)
-    // {
-    // cout << scores.size()<< endl;
-    // score.first->set_score(score.second);
-    // score.first->increase_score(score.second);
 
-    //////////////////////////////
-    // cout << score.first->get_name()  << " score: " << score.second << " " << score.first->get_score() << endl;
-    //////////////////////////////
     int i = 0;
     for (auto players_team : this->players_of_team)
     {
@@ -66,22 +52,11 @@ void Week::update_players()
                 Player *player = find_player(player_of_team.first);
                 player->set_score(player_of_team.second);
                 player->increase_score(player_of_team.second);
-                // cout << player_of_team.second << " score : ,,,,,,,,,,," << endl;
-
-                ////////
-                ////////
-                ////////
-                ////////
-                ////////
 
                 player->increase_assists_goals(number_of_assist(player_of_team.first, i));
 
-                // cout << "player name : " << player_of_team.first << " number of assist : " << number_of_assist(player_of_team.first , i) << " number of goal : " << number_of_goal(player_of_team.first , i) << " " << i << endl;
-
                 player->increase_goals(number_of_goal(player_of_team.first, i));
-                player->increase_clean_sheet(matches[1]->get_result1() != 0);
-                // cout << matches[i]->get_result1() << endl;
-                //////////////////////////////
+                player->increase_clean_sheet(matches[1]->get_result2() == 0);
             }
         }
         for (auto player_of_team : players_team.second)
@@ -94,7 +69,7 @@ void Week::update_players()
 
                 player->increase_assists_goals(number_of_assist(player_of_team.first, i));
                 player->increase_goals(number_of_goal(player_of_team.first, i));
-                player->increase_clean_sheet(matches[i]->get_result2() != 0);
+                player->increase_clean_sheet(matches[i]->get_result1() == 0);
             }
         }
         i++;
@@ -236,35 +211,6 @@ int Week::number_of_assist(string player_name, int row_number)
     return number_of_assist;
 }
 
-// need to be deleted
-void Week::print_week()
-{
-    cout << endl
-         << "Week " << this->week_number << ":" << endl;
-    cout << "Scores:" << endl;
-    // cout << "size of scores: " << this->scores.size() << endl;
-    for (auto player : this->players_of_team)
-    {
-        cout << "team1:" << endl;
-        for (auto player1 : player.first)
-        {
-            if (find_player(player1.first) != nullptr)
-                cout << player1.first << " " << find_player(player1.first)->get_player_price() << endl;
-            else
-                cout << player1.first << " "
-                     << "mmmmmm" << endl;
-        }
-        cout << "team2:" << endl;
-        for (auto player1 : player.second)
-        {
-            if (find_player(player1.first) != nullptr)
-                cout << player1.first << " " << find_player(player1.first)->get_player_price() << endl;
-            else
-                cout << player1.first << " "
-                     << "mmmmmm" << endl;
-        }
-    }
-}
 
 double Week::score_calculator(double x)
 {
@@ -275,15 +221,12 @@ void Week::update_scores()
 {
     for (int i = 0; i < 10; i++)
     {
-        // fist put players type
 
         set_type_of_player_position(i);
 
-        // defult value of win or draw
         if (matches[i]->get_result1() > matches[i]->get_result2())
         {
             // team 1 win
-            //  for(auto x : players_of_team[i].first)
             for (size_t k = 0; k < players_of_team[i].first.size(); k++)
             {
                 players_of_team[i].first[k].second += DEFULT_WIN_SCORE_WEEK;
@@ -325,7 +268,7 @@ void Week::update_scores()
         }
         else
         {
-            players_of_team[i].first[0].second -= matches[i]->get_result1();
+            players_of_team[i].first[0].second -= matches[i]->get_result2();
         }
 
         if (matches[i]->get_result1() == 0)
@@ -335,17 +278,12 @@ void Week::update_scores()
         else
         {
             // cout << "nkkk"
-            players_of_team[i].second[0].second -= matches[i]->get_result2();
+            players_of_team[i].second[0].second -= matches[i]->get_result1();
         }
 
-        //????????????????????????????????????????  ???????????????????????????
         players_of_team[i].first[0].second += DEFULT_SCORE_GOALKEEPER_IN_WEEK;
         players_of_team[i].second[0].second += DEFULT_SCORE_GOALKEEPER_IN_WEEK;
-        //????????????????????????????????????????  ???????????????????????????
 
-        ////////////////////////////// need to be currect //////////////////////////////
-
-        // goals and assist for defenders
         if (matches[i]->get_result2() == 0)
         {
             for (int j = 1; j < 5; j++)
@@ -371,8 +309,6 @@ void Week::update_scores()
             players_of_team[i].second[j].second += DEFULT_SCORE_DEFENDER_IN_WEEK;
         }
 
-        // goals and assist for midfielders
-
         if (matches[i]->get_result2() == 0)
         {
             for (int j = 5; j < 8; j++)
@@ -389,14 +325,11 @@ void Week::update_scores()
         }
         for (int j = 5; j < 8; j++)
         {
-            ////////////////////////////// need to be check //////////////////////////////
             players_of_team[i].first[j].second += number_of_goal(players_of_team[i].first[j].first, i) * DEFULT_GOAL_SCORE_MIDFIELDER;
             players_of_team[i].first[j].second += number_of_assist(players_of_team[i].first[j].first, i) * DEFULT_GOAL_ASSIST_SCORE_MIDFIELDER;
             players_of_team[i].second[j].second += number_of_goal(players_of_team[i].second[j].first, i) * DEFULT_GOAL_SCORE_MIDFIELDER;
             players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first, i) * DEFULT_GOAL_ASSIST_SCORE_MIDFIELDER;
         }
-
-        // goals and assist for forwards
 
         for (int j = 8; j < 11; j++)
         {
@@ -410,7 +343,6 @@ void Week::update_scores()
             }
             if (number_of_goal(players_of_team[i].second[j].first, i) == 0)
             {
-                // cout << "''''''''''''''''''"  << players_of_team[i].second[j].first << " " << players_of_team[i].second[j].second << j << endl;
                 players_of_team[i].second[j].second += DEFULT_NOT_GOAL_SCORE_FORWARD;
             }
             else
@@ -422,14 +354,9 @@ void Week::update_scores()
             players_of_team[i].second[j].second += number_of_assist(players_of_team[i].second[j].first, i) * DEFULT_GOAL_ASSIST_SCORE_FORWARD;
         }
 
-        /////////// for own goal ///////////
-
-        /////////// need to be check ///////////
-        // for(auto x : players_of_team)
         for (size_t k = 0; k < players_of_team.size(); k++)
         {
-            // for(auto y : players_of_team[k].first)
-            // {
+
             for (int x = 0; x < players_of_team[k].first.size(); x++)
             {
                 if (is_OWN_GOAL(players_of_team[k].first[x].first, i))
@@ -437,13 +364,7 @@ void Week::update_scores()
                     players_of_team[k].first[x].second += DEFULT_OWN_GOAL_SCORE;
                 }
             }
-            // for(auto y : players_of_team[k].second)
-            // {
-            //     if(is_OWN_GOAL(y.first,i))
-            //     {
-            //         y.second += DEFULT_OWN_GOAL_SCORE;
-            //     }
-            // }
+
             for (int x = 0; x < players_of_team[k].second.size(); x++)
             {
                 if (is_OWN_GOAL(players_of_team[k].second[x].first, i))
@@ -452,20 +373,7 @@ void Week::update_scores()
                 }
             }
         }
-        /////////// need to be check ///////////
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////// need to complete ///////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // check goal of each player
-        //  for(auto x : goal_with_assist[i])
         for (size_t k = 0; k < goal_with_assist[i].size(); k++)
         {
             vector<pair<string, double>> *team1;
@@ -492,7 +400,6 @@ void Week::update_scores()
                 if (defender_position == LEFT_CORNER)
                 {
                     team2->at(4).second -= 1;
-                    // cout << team2->at(4).first << endl;
                 }
                 if (defender_position == LEFT_MIDDLE || defender_position == LEFT_MIDDLE)
                 {
@@ -517,43 +424,28 @@ void Week::update_scores()
                 Forward_position forward_position = forward_player->get_player_position();
                 if (forward_position == LEFT_WING)
                 {
-                    team2->at(1).second -= 1;
+                    team2->at(4).second -= 1;
                 }
                 if (forward_position == CENTER_FORWARD)
                 {
-                    team2->at(4).second -= 1;
+                    team2->at(2).second -= 1;
+                    team2->at(3).second -= 1;
                 }
                 if (forward_position == RIGHT_WING)
                 {
-                    team2->at(2).second -= 1;
-                    team1->at(3).second -= 1;
+                    team2->at(1).second -= 1;
                 }
             }
         }
     }
 
-    // cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-    // for(auto x : players_of_team)
+    // for (auto x : players_of_team)
     // {
-    //     for(pair<string ,double>* y : x.first)
+    //     for (auto y : x.first)
     //     {
-    //         // cout << "oooooo" << y.first << " " << y.second << endl;
-    //         y.second = score_calculator(y.second);
-    //     }
-    //     for(auto y : x.second)
-    //     {
-    //         y.second = score_calculator(y.second);
-
+    //         cout << "xxxxxxnnxxxx " << y.first << " " << y.second << endl;
     //     }
     // }
-
-    for (auto x : players_of_team)
-    {
-        for (auto y : x.first)
-        {
-            cout << "xxxxxxnnxxxx " << y.first << " " << y.second << endl;
-        }
-    }
 
     for (int i = 0; i < players_of_team.size(); i++)
     {
@@ -567,7 +459,6 @@ void Week::update_scores()
         }
     }
 
-    ////////////////////////////////
     update_type_players();
 }
 

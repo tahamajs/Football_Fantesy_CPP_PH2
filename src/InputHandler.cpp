@@ -171,10 +171,8 @@ void InputHandler::signup()
         throw Bad_request();
     command_line >> password;
 
-    //////////////////////////////////////////////  delete this part ///////////////////////////////////////////////////
     if (username == "" || password == "")
         throw Bad_request();
-    //////////////////////////////////////////////  delete this part ///////////////////////////////////////////////////
     system->signup(username, password);
     print_successfull_massage();
 }
@@ -204,10 +202,8 @@ void InputHandler::login()
 
     command_line >> password;
 
-    //////////////////////////////////////////////  delete this part ///////////////////////////////////////////////////
     if (username == "" || password == "")
         throw Bad_request();
-    //////////////////////////////////////////////  delete this part ///////////////////////////////////////////////////
     system->login(username, password);
     print_successfull_massage();
 }
@@ -241,7 +237,6 @@ void InputHandler::print_team_of_the_week()
     else
         throw Bad_request();
 
-    print_successfull_massage();
 }
 
 void InputHandler::pass_week()
@@ -368,7 +363,6 @@ void InputHandler::show_fantasy_team()
     else
         throw Bad_request();
 
-    print_successfull_massage();
 }
 
 void InputHandler::open_transfer_window()
@@ -418,7 +412,6 @@ void InputHandler::show_players()
         command_line >> team_name;
         replaceUnderscoresWithSpaces(team_name);
         system->print_main_team_players(team_name, EMPTY_STRING, false);
-        print_successfull_massage();
     }
     else if (count == 6)
     {
@@ -427,7 +420,7 @@ void InputHandler::show_players()
             throw Bad_request();
         command_line >> team_name;
         replaceUnderscoresWithSpaces(team_name);
-        cout << team_name << endl;
+
         command_line >> input;
         if (input == RANK_INSTRUCTION)
         {
@@ -465,7 +458,6 @@ void InputHandler::show_players()
         throw Bad_request();
 }
 
-////////////////////////////////////  need to be check  /////////////////////////////////////////////
 void InputHandler::set_captan()
 {
     string input;
@@ -487,5 +479,4 @@ void InputHandler::set_captan()
 void InputHandler::show_budget()
 {
     system->show_budget();
-    // print_successfull_massage();
 }

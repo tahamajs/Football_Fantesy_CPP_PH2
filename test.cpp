@@ -13,7 +13,7 @@ double sigmoid(double x) {
 int main()
 {
 
-    double x = 13;
+    double x = -1;
     cout << x << " " << floor(sigmoid(x)*10)/10 << endl;
     printf("%.1f " ,sigmoid(x) );
 
