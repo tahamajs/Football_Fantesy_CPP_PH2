@@ -31,21 +31,26 @@ void InputHandler::run()
         }
         catch (const Bad_request &e)
         {
-            cerr << e.what() << '\n';
+            cout << e.what() << '\n';
         }
         catch (const Not_Found &e)
         {
-            cerr << e.what() << '\n';
+            cout << e.what() << '\n';
         }
         catch (const Permission_denied &e)
         {
-            cerr << e.what() << '\n';
+            cout << e.what() << '\n';
         }
         catch (const Empty &e)
         {
-            cerr << e.what() << '\n';
+            cout << e.what() << '\n';
+        }
+        catch (const Player_not_available &e)
+        {
+            cout << e.what() << '\n';
         }
     }
+
 }
 
 bool InputHandler::check_reapeted_input_type(const vector<string> &inputs_type)
@@ -155,8 +160,6 @@ void InputHandler::signup()
     string password;
     int count = count_of_input_word();
 
-    // cout << count << endl;
-
     if (!cmnd_dlmtr_check())
         throw Bad_request();
 
@@ -251,7 +254,6 @@ void InputHandler::pass_week()
 void InputHandler::buy_player()
 {
 
-    // int count = count_of_input_word();
     string input;
     string player_name;
 

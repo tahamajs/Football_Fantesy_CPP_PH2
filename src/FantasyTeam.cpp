@@ -1,6 +1,16 @@
 #include "../include/FantasyTeam.hpp"
 // Path: phase_1/src/FantasyTeam.cpp
 
+double inverse_double_sigmoid(double y)
+{
+    return -6.0 * log(10.0 / y - 1.0);
+}
+
+double sigmoid(double x)
+{
+    return 10.0 / (1.0 + exp(-x / 6.0));
+}
+
 FantasyTeam::FantasyTeam(string _name)
 {
     this->team_name = _name;
@@ -134,17 +144,40 @@ void FantasyTeam::update_score()
         is_full_yet = true;
 
     if (Forward_player != NULL)
-        score += Forward_player->get_score();
+    {
+        if (is_capitan(Forward_player))
+            score += sigmoid(inverse_double_sigmoid(Forward_player->get_score()) * 2);
+        else
+            score += Forward_player->get_score();
+    }
     if (Midfielder_player != NULL)
-        score += Midfielder_player->get_score();
+    {
+        if (is_capitan(Midfielder_player))
+            score += sigmoid(inverse_double_sigmoid(Midfielder_player->get_score()) * 2);
+        else
+            score += Midfielder_player->get_score();
+    }
     if (Defender_1_player != NULL)
-        score += Defender_1_player->get_score();
+    {
+        if (is_capitan(Defender_1_player))
+            score += sigmoid(inverse_double_sigmoid(Defender_1_player->get_score()) * 2);
+        else
+            score += Defender_1_player->get_score();
+    }
     if (Defender_2_player != NULL)
-        score += Defender_2_player->get_score();
+    {
+        if (is_capitan(Defender_2_player))
+            score += sigmoid(inverse_double_sigmoid(Defender_2_player->get_score()) * 2);
+        else
+            score += Defender_2_player->get_score();
+    }
     if (Goalkeeper_player != NULL)
-        score += Goalkeeper_player->get_score();
-    if (Captain_player != NULL)
-        score += Captain_player->get_score();
+    {
+        if (is_capitan(Goalkeeper_player))
+            score += sigmoid(inverse_double_sigmoid(Goalkeeper_player->get_score()) * 2);
+        else
+            score += Goalkeeper_player->get_score();
+    }
 }
 
 vector<Player *> FantasyTeam::get_fantasy_team_players()
@@ -153,7 +186,6 @@ vector<Player *> FantasyTeam::get_fantasy_team_players()
 
     fantasy_team_players.push_back(Goalkeeper_player);
 
-    // need to check correctness
     if (Defender_1_player->get_name() < Defender_2_player->get_name())
     {
         fantasy_team_players.push_back(Defender_1_player);

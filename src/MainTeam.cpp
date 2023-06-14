@@ -79,7 +79,6 @@ vector<Player *> MainTeam::get_forward_players(bool rank)
     return this->forward_players;
 }
 
-// need to be deleted
 void MainTeam::print_team()
 {
     cout << this->team_name << endl;

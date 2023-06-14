@@ -211,7 +211,6 @@ int Week::number_of_assist(string player_name, int row_number)
     return number_of_assist;
 }
 
-
 double Week::score_calculator(double x)
 {
     return 10.0 / (1.0 + exp(-x / 6.0));
@@ -401,7 +400,7 @@ void Week::update_scores()
                 {
                     team2->at(4).second -= 1;
                 }
-                if (defender_position == LEFT_MIDDLE || defender_position == LEFT_MIDDLE)
+                if (defender_position == LEFT_MIDDLE || defender_position == RIGHT_MIDDLE)
                 {
                     team2->at(2).second -= 1;
                     team2->at(3).second -= 1;

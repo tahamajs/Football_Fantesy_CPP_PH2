@@ -86,7 +86,6 @@ vector<string> System::split(const string &str, char delim)
     return tokens;
 }
 
-// need to check
 void System::init_main_teams()
 {
     ifstream file;
@@ -324,7 +323,7 @@ void System::login_admin(const string &_password)
         throw Bad_request();
     if (!admin->check_password(_password))
         throw Bad_request();
-    
+
     this->is_admin_login = true;
 }
 
@@ -334,6 +333,7 @@ void System::update_week()
         player->set_score(0);
 
     weeks[week_number - 1]->update_players();
+
     for (auto player : players)
     {
         player->update_can_be_sold(week_number);
@@ -447,6 +447,8 @@ void System::print_fantasy_team(string team_name = "")
     vector<Player *> players = fantasy_team->get_fantasy_team_players();
     cout << "Fantasy Team: " << team_name << endl;
 
+    ///////////////     /////   ////////////////////// need to delete   /////////////////////////////
+
     cout << "GoalKeeper: " << players[0]->get_name();
     if (fantasy_team->is_capitan(players[0]))
         cout << " " << CAPTAIN_STRING;
@@ -479,6 +481,8 @@ void System::print_fantasy_team(string team_name = "")
 
 void System::print_matches_result_league(int _week_number)
 {
+    if (_week_number < 0 || _week_number > week_number)
+        throw Bad_request();
     vector<Match *> matches = weeks[_week_number - 1]->get_matches();
     for (auto match : matches)
     {
@@ -672,11 +676,6 @@ void System::print_league_standings()
              << "GF: " << teams[i]->get_goal_for() << " | "
              << "GA: " << teams[i]->get_goal_against() << endl;
     }
-}
-
-void System::print_week_1()
-{
-    weeks[0]->print_week();
 }
 
 void System::print_players()

@@ -77,3 +77,11 @@ void Player::increase_score(double score)
     scores_of_weeks.push_back(score);
     count_of_week_played++;
 }
+
+double Player::get_score()
+{
+    if (scores_of_weeks.size() != 0)
+        return scores_of_weeks.back();
+    else
+        return 0;
+}

@@ -16,7 +16,7 @@ public:
     Player(string name, double score, enum Player_type type);
     virtual ~Player(){};
 
-    double get_score() { return score; }
+    double get_score();
     const string &get_name() { return name; }
     enum Player_type get_type() { return type; }
     bool get_can_be_sold(int week_number);
