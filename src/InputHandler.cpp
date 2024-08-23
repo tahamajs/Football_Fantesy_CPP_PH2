@@ -92,7 +92,8 @@ bool InputHandler::cmnd_end_check()
     return false;
 }
 
-bool InputHandler::has_empty_field(const vector<string> &inputs, const vector<string> &needed_inputs)
+bool InputHandler::
+(const vector<string> &inputs, const vector<string> &needed_inputs)
 {
     unordered_set<string> input_set(inputs.begin(), inputs.end());
 

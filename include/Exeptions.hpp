@@ -2,7 +2,7 @@
 
 using namespace std;
 
-class Not_Found : public exception
+class Not_Found : public exce   ption
 {
 public:
     const char *what() const noexcept override;
@@ -10,7 +10,7 @@ public:
 
 class Bad_request : public exception
 {
-public:
+public
     const char *what() const noexcept override;
 };
 

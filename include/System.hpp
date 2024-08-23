@@ -14,7 +14,6 @@
 #include "../include/Admin.hpp"
 #include "../include/Week.hpp"
 #include "../include/FantasyTeam.hpp"
-// #include "../include/Exeptions.hpp"
 
 using namespace std;
 const double DEFULT_SCORE = 0;

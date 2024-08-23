@@ -20,5 +20,11 @@ public:
 private:
     int goals = DEFULT_GOAL;
     int assists_goals = DEFULT_GOAL;
+    
     enum Forward_position position;
+
+
+
+
+
 };
