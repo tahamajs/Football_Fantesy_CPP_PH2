@@ -1,27 +1,16 @@
-# # Makefile for C++ program
-
-# # Compiler and compiler options
-# CXX = g++
-# CXXFLAGS = -Wall -g -std=c++11
-
-# # Source files and object files
-# SRCDIR = src
-# SRCS = $(wildcard $(SRCDIR)/*.cpp)
-# OBJDIR = build
-# OBJS = $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
-
-
 CXX = g++ -std=c++11
 CC_FLAGS = -g
 CC = ${CXX} ${CC_FLAGS} 
 BUILD_DIR = build
-HEADERS_DIR=include
+BIN_DIR = bin
+HEADERS_DIR = include
 SOURCE_DIR = src
 
-all: futballFantasy.out
+all: $(BIN_DIR)/futballFantasy.out
 
-futballFantasy.out : $(BUILD_DIR)/Admin.o $(BUILD_DIR)/Exeptions.o $(BUILD_DIR)/FantasyTeam.o $(BUILD_DIR)/InputHandler.o $(BUILD_DIR)/main.o $(BUILD_DIR)/MainTeam.o $(BUILD_DIR)/Match.o $(BUILD_DIR)/Player.o $(BUILD_DIR)/System.o $(BUILD_DIR)/User.o $(BUILD_DIR)/Week.o $(BUILD_DIR)/DefenderPlayer.o $(BUILD_DIR)/ForwardPlayer.o $(BUILD_DIR)/GoalkeeperPlayer.o $(BUILD_DIR)/MidfielderPlayer.o
-	$(CC) -o futballFantasy.out $(BUILD_DIR)/Admin.o $(BUILD_DIR)/Exeptions.o $(BUILD_DIR)/FantasyTeam.o $(BUILD_DIR)/InputHandler.o $(BUILD_DIR)/main.o $(BUILD_DIR)/MainTeam.o $(BUILD_DIR)/Match.o $(BUILD_DIR)/Player.o $(BUILD_DIR)/System.o $(BUILD_DIR)/User.o $(BUILD_DIR)/Week.o $(BUILD_DIR)/DefenderPlayer.o $(BUILD_DIR)/ForwardPlayer.o $(BUILD_DIR)/GoalkeeperPlayer.o $(BUILD_DIR)/MidfielderPlayer.o
+$(BIN_DIR)/futballFantasy.out : $(BUILD_DIR)/Admin.o $(BUILD_DIR)/Exeptions.o $(BUILD_DIR)/FantasyTeam.o $(BUILD_DIR)/InputHandler.o $(BUILD_DIR)/main.o $(BUILD_DIR)/MainTeam.o $(BUILD_DIR)/Match.o $(BUILD_DIR)/Player.o $(BUILD_DIR)/System.o $(BUILD_DIR)/User.o $(BUILD_DIR)/Week.o $(BUILD_DIR)/DefenderPlayer.o $(BUILD_DIR)/ForwardPlayer.o $(BUILD_DIR)/GoalkeeperPlayer.o $(BUILD_DIR)/MidfielderPlayer.o
+	mkdir -p $(BIN_DIR)
+	$(CC) -o $(BIN_DIR)/futballFantasy.out $(BUILD_DIR)/Admin.o $(BUILD_DIR)/Exeptions.o $(BUILD_DIR)/FantasyTeam.o $(BUILD_DIR)/InputHandler.o $(BUILD_DIR)/main.o $(BUILD_DIR)/MainTeam.o $(BUILD_DIR)/Match.o $(BUILD_DIR)/Player.o $(BUILD_DIR)/System.o $(BUILD_DIR)/User.o $(BUILD_DIR)/Week.o $(BUILD_DIR)/DefenderPlayer.o $(BUILD_DIR)/ForwardPlayer.o $(BUILD_DIR)/GoalkeeperPlayer.o $(BUILD_DIR)/MidfielderPlayer.o
 
 $(BUILD_DIR)/Admin.o : $(SOURCE_DIR)/Admin.cpp $(HEADERS_DIR)/Consts.hpp
 	$(CC) -c $(SOURCE_DIR)/Admin.cpp -o $(BUILD_DIR)/Admin.o
@@ -70,8 +59,8 @@ $(BUILD_DIR)/MidfielderPlayer.o : $(SOURCE_DIR)/MidfielderPlayer.cpp $(HEADERS_D
 
 
 clean:
-	rm -rf build/ 
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
 	mkdir $(BUILD_DIR)
 
-run: futballFantasy.out
-	./futballFantasy.out
+run: $(BIN_DIR)/futballFantasy.out
+	./$(BIN_DIR)/futballFantasy.out
